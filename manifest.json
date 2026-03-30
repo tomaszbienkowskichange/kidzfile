@@ -2,7 +2,7 @@
   "name": "KidzFile Pro",
   "short_name": "KidzFile",
   "description": "System zarządzania zdrowiem i dokumentami dziecka",
-  "start_url": "./kidzfile_pro_2026.html",
+  "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#1a1408",
   "theme_color": "#d4622a",
