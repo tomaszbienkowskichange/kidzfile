@@ -17,7 +17,7 @@
 <meta name="apple-mobile-web-app-title" content="KidzFile">
 <meta name="theme-color" content="#d4622a">
 <link rel="apple-touch-icon" href="icon-192.png">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,800;1,9..144,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,800;1,9..144,400&family=DM+Sans:wght@300;400;500;600&family=Inter:wght@300;400;500;600&family=Lato:wght@300;400;700&family=Nunito:wght@300;400;600;700&family=Merriweather:wght@300;400;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 /* ═══ THEME VARIABLES ═══ */
 [data-theme="light"] {
@@ -42,13 +42,32 @@
   --shadow:0 2px 12px rgba(0,0,0,0.3);--shadow-lg:0 8px 32px rgba(0,0,0,0.4);
   --input-bg:#1a1510;--card-bg:#1a1510;
 }
-:root { --r:12px; --r-sm:8px; }
+:root {
+  --r:12px; --r-sm:8px;
+  --font-body: 'DM Sans', sans-serif;
+  --font-display: 'Fraunces', serif;
+}
+/* Accent color themes */
+[data-accent="orange"] { --accent:#d4622a;--accent2:#2a6ed4;--accent3:#2ab87a; }
+[data-accent="blue"]   { --accent:#1a7fd4;--accent2:#d4622a;--accent3:#2ab87a; }
+[data-accent="green"]  { --accent:#1a8a4a;--accent2:#2a6ed4;--accent3:#d4622a; }
+[data-accent="purple"] { --accent:#7c3aed;--accent2:#2a6ed4;--accent3:#2ab87a; }
+[data-accent="rose"]   { --accent:#e11d7a;--accent2:#2a6ed4;--accent3:#2ab87a; }
+[data-accent="teal"]   { --accent:#0d9488;--accent2:#7c3aed;--accent3:#d4622a; }
+
+/* Font themes */
+[data-font="dmsans"]     { --font-body:'DM Sans',sans-serif;   --font-display:'Fraunces',serif; }
+[data-font="inter"]      { --font-body:'Inter',sans-serif;     --font-display:'Inter',sans-serif; }
+[data-font="poppins"]    { --font-body:'Poppins',sans-serif;   --font-display:'Poppins',sans-serif; }
+[data-font="nunito"]     { --font-body:'Nunito',sans-serif;    --font-display:'Nunito',sans-serif; }
+[data-font="lato"]       { --font-body:'Lato',sans-serif;      --font-display:'Merriweather',serif; }
+[data-font="merriweather"]{ --font-body:'Merriweather',serif;  --font-display:'Merriweather',serif; }
 *{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;font-size:14px;transition:background .2s,color .2s;}
+body{font-family:var(--font-body,'DM Sans',sans-serif);background:var(--bg);color:var(--ink);min-height:100vh;font-size:14px;transition:background .2s,color .2s;}
 
 /* ═══ HEADER ═══ */
 header{background:var(--header-bg);color:var(--header-text);padding:0 20px;display:flex;align-items:center;justify-content:space-between;height:58px;position:sticky;top:0;z-index:200;box-shadow:0 2px 16px rgba(0,0,0,0.4);gap:12px;}
-.logo{font-family:'Fraunces',serif;font-size:20px;font-weight:800;letter-spacing:-0.5px;white-space:nowrap;}
+.logo{font-family:var(--font-display,'Fraunces',serif);font-size:20px;font-weight:800;letter-spacing:-0.5px;white-space:nowrap;}
 .logo span{color:var(--accent);}
 .logo-badge{font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;background:rgba(212,98,42,0.25);border:1px solid rgba(212,98,42,0.4);color:var(--accent);letter-spacing:.5px;vertical-align:middle;margin-left:6px;}
 .header-center{flex:1;display:flex;align-items:center;justify-content:center;gap:8px;}
@@ -460,6 +479,14 @@ main{overflow-y:auto;padding:24px;background:var(--bg);}
   header{padding:0 8px;padding-top:var(--safe-top);}
 }
 
+
+/* ═══ COLOR & FONT SWATCHES ═══ */
+.color-swatch{width:36px;height:36px;border-radius:50%;cursor:pointer;border:3px solid transparent;transition:all .15s;flex-shrink:0;}
+.color-swatch.active,.color-swatch:hover{border-color:var(--ink);transform:scale(1.12);}
+.font-swatch{padding:10px 12px;border:1.5px solid var(--border);border-radius:var(--r-sm);cursor:pointer;font-size:13px;font-weight:600;color:var(--ink2);transition:all .15s;display:flex;justify-content:space-between;align-items:center;}
+.font-swatch span{font-size:18px;opacity:.6;}
+.font-swatch.active,.font-swatch:hover{border-color:var(--accent);color:var(--accent);background:rgba(212,98,42,.06);}
+
 /* DOT COLORS */
 .dot-label-school{color:var(--accent2);}
 .dot-label-dentist{color:#e67e22;}
@@ -579,6 +606,16 @@ main{overflow-y:auto;padding:24px;background:var(--bg);}
   <div class="nav-item" onclick="showPage('bone',this)"><div class="nav-dot dot-bone"></div> Ortopeda</div>
   <div class="nav-item" onclick="showPage('school',this)"><div class="nav-dot dot-school"></div> Szkoła</div>
   <div class="nav-item" onclick="showPage('specialists',this)"><div class="nav-dot dot-other"></div> Inne specjalizacje</div>
+
+  <div class="sidebar-section">Szkoła</div>
+  <div class="nav-item" onclick="showPage('grades',this)">📊 Oceny & Frekwencja</div>
+  <div class="nav-item" onclick="showPage('schedule',this)">📅 Plan lekcji</div>
+  <div class="nav-item" onclick="showPage('activities',this)">⚽ Zajęcia dodatkowe</div>
+
+  <div class="sidebar-section">Dobrostan</div>
+  <div class="nav-item" onclick="showPage('sleep',this)">😴 Sen & Nastrój</div>
+  <div class="nav-item" onclick="showPage('nutrition',this)">🍎 Żywienie</div>
+  <div class="nav-item" onclick="showPage('finance',this)">💰 Finanse & Kieszonkowe</div>
 
   <div class="sidebar-section">System</div>
   <div class="nav-item" onclick="showPage('history',this)">📅 Historia zdarzeń</div>
@@ -860,14 +897,140 @@ main{overflow-y:auto;padding:24px;background:var(--bg);}
   </div>
 
   <!-- APPEARANCE -->
-  <div class="card">
-    <div class="card-header"><div class="card-label">🎨 Wygląd</div></div>
-    <div style="padding:16px;display:flex;gap:10px;flex-wrap:wrap;">
-      <button class="btn btn-secondary" onclick="setTheme('light')">☀️ Jasny motyw</button>
-      <button class="btn btn-secondary" onclick="setTheme('dark')">🌙 Ciemny motyw</button>
-      <button class="btn btn-danger btn-sm" onclick="clearAllData()" style="margin-left:auto;">🗑️ Usuń wszystkie dane</button>
+  <div class="card" style="margin-bottom:14px;">
+    <div class="card-header"><div class="card-label">🎨 Wygląd & Personalizacja</div></div>
+    <div style="padding:16px;">
+      <div class="form-group">
+        <label class="form-label">Motyw kolorystyczny</label>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;">
+          <div class="color-swatch" data-accent="orange" onclick="setAccent('orange')" title="Pomarańczowy" style="background:#d4622a;"></div>
+          <div class="color-swatch" data-accent="blue"   onclick="setAccent('blue')"   title="Niebieski"   style="background:#1a7fd4;"></div>
+          <div class="color-swatch" data-accent="green"  onclick="setAccent('green')"  title="Zielony"     style="background:#1a8a4a;"></div>
+          <div class="color-swatch" data-accent="purple" onclick="setAccent('purple')" title="Fioletowy"   style="background:#7c3aed;"></div>
+          <div class="color-swatch" data-accent="rose"   onclick="setAccent('rose')"   title="Różowy"      style="background:#e11d7a;"></div>
+          <div class="color-swatch" data-accent="teal"   onclick="setAccent('teal')"   title="Turkusowy"   style="background:#0d9488;"></div>
+        </div>
+      </div>
+      <div class="form-group" style="margin-top:14px;">
+        <label class="form-label">Czcionka</label>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;margin-top:6px;">
+          <div class="font-swatch" data-font="dmsans"      onclick="setFont('dmsans')"       style="font-family:'DM Sans',sans-serif;">DM Sans <span>Aa</span></div>
+          <div class="font-swatch" data-font="inter"       onclick="setFont('inter')"        style="font-family:'Inter',sans-serif;">Inter <span>Aa</span></div>
+          <div class="font-swatch" data-font="poppins"     onclick="setFont('poppins')"      style="font-family:'Poppins',sans-serif;">Poppins <span>Aa</span></div>
+          <div class="font-swatch" data-font="nunito"      onclick="setFont('nunito')"       style="font-family:'Nunito',sans-serif;">Nunito <span>Aa</span></div>
+          <div class="font-swatch" data-font="lato"        onclick="setFont('lato')"         style="font-family:'Lato',sans-serif;">Lato <span>Aa</span></div>
+          <div class="font-swatch" data-font="merriweather" onclick="setFont('merriweather')" style="font-family:'Merriweather',serif;">Merriweather <span>Aa</span></div>
+        </div>
+      </div>
+      <div class="form-group" style="margin-top:14px;">
+        <label class="form-label">Jasność / Tryb</label>
+        <div style="display:flex;gap:8px;margin-top:6px;flex-wrap:wrap;">
+          <button class="btn btn-secondary" onclick="setTheme('light')">☀️ Jasny</button>
+          <button class="btn btn-secondary" onclick="setTheme('dark')">🌙 Ciemny</button>
+        </div>
+      </div>
+      <div class="form-group" style="margin-top:14px;">
+        <label class="form-label">Rozmiar tekstu</label>
+        <div style="display:flex;align-items:center;gap:12px;margin-top:6px;">
+          <span style="font-size:11px;color:var(--ink3)">A</span>
+          <input type="range" min="12" max="18" value="14" step="1" id="font-size-slider" oninput="setFontSize(this.value)" style="flex:1;">
+          <span style="font-size:17px;color:var(--ink3)">A</span>
+          <span id="font-size-label" style="font-size:12px;color:var(--ink3);min-width:30px;">14px</span>
+        </div>
+      </div>
     </div>
   </div>
+
+  <div class="card">
+    <div class="card-header"><div class="card-label">⚠️ Strefa niebezpieczna</div></div>
+    <div style="padding:16px;">
+      <button class="btn btn-danger btn-sm" onclick="clearAllData()">🗑️ Usuń wszystkie dane</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══ GRADES PAGE ═══ -->
+<div class="page" id="page-grades">
+  <div class="page-header">
+    <div><div class="page-title">📊 Oceny & Frekwencja</div><div class="page-sub">Dziennik ocen, nieobecności, uwagi nauczycieli</div></div>
+    <button class="btn btn-primary" onclick="openModal('addGrade')">+ Dodaj ocenę</button>
+  </div>
+  <div class="stats-row" id="grades-stats" style="grid-template-columns:repeat(4,1fr);margin-bottom:20px;">
+    <div class="stat-card"><div class="stat-number" id="g-avg" style="color:var(--accent2)">—</div><div class="stat-label">Średnia</div></div>
+    <div class="stat-card"><div class="stat-number" id="g-best" style="color:var(--accent3)">—</div><div class="stat-label">Najlepsza</div></div>
+    <div class="stat-card"><div class="stat-number" id="g-absences" style="color:var(--danger)">0</div><div class="stat-label">Nieobecności</div></div>
+    <div class="stat-card"><div class="stat-number" id="g-count">0</div><div class="stat-label">Wszystkich ocen</div></div>
+  </div>
+  <div class="section-title">📝 Lista ocen</div>
+  <div id="grades-list" style="display:flex;flex-direction:column;gap:6px;"></div>
+</div>
+
+<!-- ═══ SCHEDULE PAGE ═══ -->
+<div class="page" id="page-schedule">
+  <div class="page-header">
+    <div><div class="page-title">📅 Plan lekcji</div><div class="page-sub">Tygodniowy rozkład, zadania domowe, sprawdziany</div></div>
+    <button class="btn btn-primary" onclick="openModal('addScheduleItem')">+ Dodaj</button>
+  </div>
+  <div class="tabs" id="schedule-tabs">
+    <div class="tab active" onclick="renderScheduleDay('Poniedziałek',this)">Pon</div>
+    <div class="tab" onclick="renderScheduleDay('Wtorek',this)">Wt</div>
+    <div class="tab" onclick="renderScheduleDay('Środa',this)">Śr</div>
+    <div class="tab" onclick="renderScheduleDay('Czwartek',this)">Czw</div>
+    <div class="tab" onclick="renderScheduleDay('Piątek',this)">Pt</div>
+  </div>
+  <div id="schedule-day-list" style="display:flex;flex-direction:column;gap:6px;"></div>
+</div>
+
+<!-- ═══ ACTIVITIES PAGE ═══ -->
+<div class="page" id="page-activities">
+  <div class="page-header">
+    <div><div class="page-title">⚽ Zajęcia dodatkowe</div><div class="page-sub">Sport, muzyka, sztuka, korepetycje</div></div>
+    <button class="btn btn-primary" onclick="openModal('addActivity')">+ Dodaj zajęcia</button>
+  </div>
+  <div class="cards-grid" id="activities-grid"></div>
+</div>
+
+<!-- ═══ SLEEP PAGE ═══ -->
+<div class="page" id="page-sleep">
+  <div class="page-header">
+    <div><div class="page-title">😴 Sen & Nastrój</div><div class="page-sub">Śledzenie snu, nastrój, poziom energii</div></div>
+    <button class="btn btn-primary" onclick="openModal('addSleep')">+ Dodaj wpis</button>
+  </div>
+  <div class="stats-row" style="margin-bottom:20px;">
+    <div class="stat-card"><div class="stat-number" id="sl-avg" style="color:var(--accent2)">—</div><div class="stat-label">Śr. sen (h)</div></div>
+    <div class="stat-card"><div class="stat-number" id="sl-mood" style="color:var(--accent3)">—</div><div class="stat-label">Śr. nastrój</div></div>
+    <div class="stat-card"><div class="stat-number" id="sl-count">0</div><div class="stat-label">Wpisów</div></div>
+  </div>
+  <div id="sleep-list" style="display:flex;flex-direction:column;gap:8px;"></div>
+</div>
+
+<!-- ═══ NUTRITION PAGE ═══ -->
+<div class="page" id="page-nutrition">
+  <div class="page-header">
+    <div><div class="page-title">🍎 Żywienie</div><div class="page-sub">Jadłospis, nawyki żywieniowe, nawodnienie</div></div>
+    <button class="btn btn-primary" onclick="openModal('addMeal')">+ Dodaj posiłek</button>
+  </div>
+  <div class="stats-row" style="margin-bottom:20px;">
+    <div class="stat-card"><div class="stat-number" id="nu-meals">0</div><div class="stat-label">Posiłków dziś</div></div>
+    <div class="stat-card"><div class="stat-number" id="nu-water" style="color:var(--accent2)">0</div><div class="stat-label">Szklanek wody</div></div>
+    <div class="stat-card"><div class="stat-number" id="nu-score" style="color:var(--accent3)">—</div><div class="stat-label">Ocena diety</div></div>
+  </div>
+  <div id="nutrition-list" style="display:flex;flex-direction:column;gap:8px;"></div>
+</div>
+
+<!-- ═══ FINANCE PAGE ═══ -->
+<div class="page" id="page-finance">
+  <div class="page-header">
+    <div><div class="page-title">💰 Finanse & Kieszonkowe</div><div class="page-sub">Opłaty za zajęcia, kieszonkowe, nagrody</div></div>
+    <button class="btn btn-primary" onclick="openModal('addFinance')">+ Dodaj wpis</button>
+  </div>
+  <div class="stats-row" style="margin-bottom:20px;">
+    <div class="stat-card"><div class="stat-number" id="fi-balance" style="color:var(--accent3)">0 zł</div><div class="stat-label">Saldo</div></div>
+    <div class="stat-card"><div class="stat-number" id="fi-month" style="color:var(--danger)">0 zł</div><div class="stat-label">Wydatki mies.</div></div>
+    <div class="stat-card"><div class="stat-number" id="fi-pocket" style="color:var(--accent2)">0 zł</div><div class="stat-label">Kieszonkowe</div></div>
+  </div>
+  <div id="finance-list" style="display:flex;flex-direction:column;gap:8px;"></div>
 </div>
 
 </main>
@@ -1087,6 +1250,201 @@ main{overflow-y:auto;padding:24px;background:var(--bg);}
   </div>
 </div>
 
+
+<!-- ADD GRADE MODAL -->
+<div class="modal-overlay" id="modal-addGrade">
+  <div class="modal">
+    <div class="modal-title">📊 Dodaj ocenę</div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Przedmiot</label><input class="form-input" id="gr-subject" placeholder="np. Matematyka, Polski…"></div>
+      <div class="form-group"><label class="form-label">Ocena</label>
+        <select class="form-select" id="gr-grade">
+          <option value="6">6 — Celujący</option><option value="5">5 — Bardzo dobry</option>
+          <option value="4">4 — Dobry</option><option value="3">3 — Dostateczny</option>
+          <option value="2">2 — Dopuszczający</option><option value="1">1 — Niedostateczny</option>
+          <option value="NB">NB — Nieobecność</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Data</label><input type="date" class="form-input" id="gr-date2"></div>
+      <div class="form-group"><label class="form-label">Waga oceny</label>
+        <select class="form-select" id="gr-weight">
+          <option value="1">1 — Zwykła</option><option value="2">2 — Klasówka</option><option value="3">3 — Praca semestralna</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group"><label class="form-label">Nauczyciel</label><input class="form-input" id="gr-teacher" placeholder="np. p. Kowalska"></div>
+    <div class="form-group"><label class="form-label">Uwagi</label><textarea class="form-textarea" id="gr-notes2" style="min-height:60px;" placeholder="Temat sprawdzianu, komentarz…"></textarea></div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('addGrade')">Anuluj</button>
+      <button class="btn btn-primary" onclick="saveGrade()">💾 Zapisz ocenę</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADD ACTIVITY MODAL -->
+<div class="modal-overlay" id="modal-addActivity">
+  <div class="modal">
+    <div class="modal-title">⚽ Dodaj zajęcia dodatkowe</div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Nazwa zajęć</label><input class="form-input" id="act-name" placeholder="np. Piłka nożna, Gitara…"></div>
+      <div class="form-group"><label class="form-label">Kategoria</label>
+        <select class="form-select" id="act-cat">
+          <option value="sport">⚽ Sport</option><option value="music">🎵 Muzyka</option>
+          <option value="art">🎨 Sztuka</option><option value="science">🔬 Nauka</option>
+          <option value="language">🌍 Języki</option><option value="other">📚 Inne</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Dzień tygodnia</label>
+        <select class="form-select" id="act-day">
+          <option>Poniedziałek</option><option>Wtorek</option><option>Środa</option>
+          <option>Czwartek</option><option>Piątek</option><option>Sobota</option><option>Niedziela</option>
+        </select>
+      </div>
+      <div class="form-group"><label class="form-label">Godzina</label><input type="time" class="form-input" id="act-time"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Trener / Nauczyciel</label><input class="form-input" id="act-teacher" placeholder="Imię i nazwisko"></div>
+      <div class="form-group"><label class="form-label">Koszt miesięczny (zł)</label><input type="number" class="form-input" id="act-cost" placeholder="0"></div>
+    </div>
+    <div class="form-group"><label class="form-label">Miejsce</label><input class="form-input" id="act-place" placeholder="Adres, sala…"></div>
+    <div class="form-group"><label class="form-label">Postępy / Notatki</label><textarea class="form-textarea" id="act-notes" style="min-height:60px;" placeholder="Osiągnięcia, uwagi…"></textarea></div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('addActivity')">Anuluj</button>
+      <button class="btn btn-primary" onclick="saveActivity()">💾 Zapisz zajęcia</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADD SLEEP MODAL -->
+<div class="modal-overlay" id="modal-addSleep">
+  <div class="modal">
+    <div class="modal-title">😴 Dodaj wpis snu / nastroju</div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Data</label><input type="date" class="form-input" id="sl-date"></div>
+      <div class="form-group"><label class="form-label">Godziny snu</label><input type="number" class="form-input" id="sl-hours" placeholder="8.5" step="0.5" min="0" max="24"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Nastrój (1–5)</label>
+        <select class="form-select" id="sl-mood">
+          <option value="5">😄 5 — Świetny</option><option value="4">🙂 4 — Dobry</option>
+          <option value="3">😐 3 — Średni</option><option value="2">😔 2 — Słaby</option><option value="1">😢 1 — Zły</option>
+        </select>
+      </div>
+      <div class="form-group"><label class="form-label">Energia (1–5)</label>
+        <select class="form-select" id="sl-energy">
+          <option value="5">⚡⚡⚡ Bardzo wysoka</option><option value="4">⚡⚡ Wysoka</option>
+          <option value="3">⚡ Średnia</option><option value="2">🔋 Niska</option><option value="1">💤 Bardzo niska</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group"><label class="form-label">Uwagi</label><textarea class="form-textarea" id="sl-notes" style="min-height:60px;" placeholder="Koszmar, bolała głowa, przed sprawdzianem…"></textarea></div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('addSleep')">Anuluj</button>
+      <button class="btn btn-primary" onclick="saveSleep()">💾 Zapisz</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADD FINANCE MODAL -->
+<div class="modal-overlay" id="modal-addFinance">
+  <div class="modal">
+    <div class="modal-title">💰 Dodaj wpis finansowy</div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Tytuł</label><input class="form-input" id="fi-title" placeholder="np. Kieszonkowe, Basen…"></div>
+      <div class="form-group"><label class="form-label">Typ</label>
+        <select class="form-select" id="fi-type">
+          <option value="income">💚 Przychód (kieszonkowe, nagroda)</option>
+          <option value="expense">❤️ Wydatek (zajęcia, przybory)</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Kwota (zł)</label><input type="number" class="form-input" id="fi-amount" placeholder="0.00" step="0.01"></div>
+      <div class="form-group"><label class="form-label">Data</label><input type="date" class="form-input" id="fi-date"></div>
+    </div>
+    <div class="form-group"><label class="form-label">Kategoria</label>
+      <select class="form-select" id="fi-cat">
+        <option value="pocket">🪙 Kieszonkowe</option><option value="activities">⚽ Zajęcia</option>
+        <option value="school">📚 Szkoła/Podręczniki</option><option value="reward">🏆 Nagroda</option>
+        <option value="other">📋 Inne</option>
+      </select>
+    </div>
+    <div class="form-group"><label class="form-label">Uwagi</label><input class="form-input" id="fi-notes" placeholder="Opcjonalnie…"></div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('addFinance')">Anuluj</button>
+      <button class="btn btn-primary" onclick="saveFinance()">💾 Zapisz</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADD MEAL MODAL -->
+<div class="modal-overlay" id="modal-addMeal">
+  <div class="modal">
+    <div class="modal-title">🍎 Dodaj posiłek / nawodnienie</div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Data</label><input type="date" class="form-input" id="meal-date"></div>
+      <div class="form-group"><label class="form-label">Posiłek</label>
+        <select class="form-select" id="meal-type">
+          <option value="breakfast">🌅 Śniadanie</option><option value="lunch">🌞 Obiad</option>
+          <option value="dinner">🌙 Kolacja</option><option value="snack">🍪 Przekąska</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group"><label class="form-label">Co zjadło / wypiło</label><textarea class="form-textarea" id="meal-desc" style="min-height:70px;" placeholder="np. Kanapka z serem, sok, jabłko…"></textarea></div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Ocena jakości (1–5)</label>
+        <select class="form-select" id="meal-quality">
+          <option value="5">⭐⭐⭐⭐⭐ Bardzo zdrowy</option><option value="4">⭐⭐⭐⭐ Zdrowy</option>
+          <option value="3">⭐⭐⭐ Przeciętny</option><option value="2">⭐⭐ Mało zdrowy</option><option value="1">⭐ Niezdrowy</option>
+        </select>
+      </div>
+      <div class="form-group"><label class="form-label">Szklanki wody dziś</label><input type="number" class="form-input" id="meal-water" placeholder="0" min="0" max="20"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('addMeal')">Anuluj</button>
+      <button class="btn btn-primary" onclick="saveMeal()">💾 Zapisz</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADD SCHEDULE ITEM MODAL -->
+<div class="modal-overlay" id="modal-addScheduleItem">
+  <div class="modal">
+    <div class="modal-title">📅 Dodaj do planu lekcji</div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Dzień</label>
+        <select class="form-select" id="sch-day">
+          <option>Poniedziałek</option><option>Wtorek</option><option>Środa</option>
+          <option>Czwartek</option><option>Piątek</option>
+        </select>
+      </div>
+      <div class="form-group"><label class="form-label">Godzina</label><input type="time" class="form-input" id="sch-time"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Przedmiot</label><input class="form-input" id="sch-subject" placeholder="np. Matematyka"></div>
+      <div class="form-group"><label class="form-label">Nauczyciel</label><input class="form-input" id="sch-teacher" placeholder="np. p. Nowak"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Sala</label><input class="form-input" id="sch-room" placeholder="np. 12"></div>
+      <div class="form-group"><label class="form-label">Typ</label>
+        <select class="form-select" id="sch-type">
+          <option value="lesson">📖 Lekcja</option><option value="homework">✏️ Zadanie domowe</option>
+          <option value="test">📝 Sprawdzian</option><option value="project">📋 Projekt</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group"><label class="form-label">Notatka</label><input class="form-input" id="sch-note" placeholder="Dodatkowe informacje…"></div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('addScheduleItem')">Anuluj</button>
+      <button class="btn btn-primary" onclick="saveScheduleItem()">💾 Zapisz</button>
+    </div>
+  </div>
+</div>
+
 <script>
 // ════════════════════════════════════════════════════════
 // SHA-256 PASSWORD SYSTEM (identyczny jak w KosztorysPro)
@@ -1223,6 +1581,12 @@ async function loadState() {
         if (!p.growth) p.growth = [];
         if (!p.documents) p.documents = [];
         if (!p.events) p.events = [];
+        if (!p.grades) p.grades = [];
+        if (!p.schedule) p.schedule = [];
+        if (!p.activities) p.activities = [];
+        if (!p.sleep) p.sleep = [];
+        if (!p.meals) p.meals = [];
+        if (!p.finances) p.finances = [];
       });
     } catch(e) { console.error('loadState error', e); }
   }
@@ -1378,6 +1742,12 @@ function showPage(id, navEl) {
     school: () => renderCategory('school'),
     specialists: () => renderCategory('specialists'),
     profile: loadProfileForm,
+    grades: renderGrades,
+    schedule: () => renderScheduleDay('Poniedziałek'),
+    activities: renderActivities,
+    sleep: renderSleep,
+    nutrition: renderNutrition,
+    finance: renderFinance,
   };
   if (renderers[id]) renderers[id]();
 }
@@ -2369,6 +2739,12 @@ async function init() {
   applyAdminMode();
   updateSidebarProfile();
   renderDashboard();
+  applyPersonalization();
+  // Set today as default date on new modals
+  const todayStr = new Date().toISOString().split('T')[0];
+  ['gr-date2','sl-date','fi-date','meal-date'].forEach(id=>{
+    const el=document.getElementById(id); if(el&&!el.value) el.value=todayStr;
+  });
 
   // Seed demo data if empty
   const cp = currentProfile();
@@ -2538,6 +2914,369 @@ function checkIOSInstall() {
       sessionStorage.setItem('pwa_ios_dismissed', '1');
     };
   }
+}
+
+
+// ════════════════════════════════════════════════════════
+// PERSONALIZATION — accent color, font, font-size
+// ════════════════════════════════════════════════════════
+function setAccent(accent) {
+  document.documentElement.setAttribute('data-accent', accent);
+  state.settings.accent = accent;
+  document.querySelectorAll('.color-swatch').forEach(el => el.classList.remove('active'));
+  const sw = document.querySelector(`.color-swatch[data-accent="${accent}"]`);
+  if (sw) sw.classList.add('active');
+  autoSave();
+}
+
+function setFont(font) {
+  document.documentElement.setAttribute('data-font', font);
+  state.settings.font = font;
+  document.querySelectorAll('.font-swatch').forEach(el => el.classList.remove('active'));
+  const sw = document.querySelector(`.font-swatch[data-font="${font}"]`);
+  if (sw) sw.classList.add('active');
+  autoSave();
+}
+
+function setFontSize(size) {
+  document.body.style.fontSize = size + 'px';
+  state.settings.fontSize = size;
+  const lbl = document.getElementById('font-size-label');
+  if (lbl) lbl.textContent = size + 'px';
+  autoSave();
+}
+
+function applyPersonalization() {
+  const s = state.settings;
+  if (s.accent) setAccent(s.accent);
+  if (s.font)   setFont(s.font);
+  if (s.fontSize) {
+    document.body.style.fontSize = s.fontSize + 'px';
+    const slider = document.getElementById('font-size-slider');
+    const lbl    = document.getElementById('font-size-label');
+    if (slider) slider.value = s.fontSize;
+    if (lbl)    lbl.textContent = s.fontSize + 'px';
+  }
+}
+
+// ════════════════════════════════════════════════════════
+// GRADES MODULE
+// ════════════════════════════════════════════════════════
+function saveGrade() {
+  const subject = document.getElementById('gr-subject').value.trim();
+  if (!subject) { showToast('⚠️ Podaj przedmiot', 'error'); return; }
+  const cp = currentProfile();
+  if (!cp.grades) cp.grades = [];
+  cp.grades.push({
+    id: Date.now(), subject,
+    grade: document.getElementById('gr-grade').value,
+    weight: parseInt(document.getElementById('gr-weight').value),
+    date: document.getElementById('gr-date2').value,
+    teacher: document.getElementById('gr-teacher').value,
+    notes: document.getElementById('gr-notes2').value,
+    createdAt: new Date().toISOString()
+  });
+  autoSave(); closeModal('addGrade'); renderGrades();
+  showToast('✅ Ocena zapisana', 'success');
+}
+
+function renderGrades() {
+  const cp = currentProfile();
+  const grades = cp.grades || [];
+  const numeric = grades.filter(g => !isNaN(parseFloat(g.grade))).map(g => parseFloat(g.grade) * (g.weight||1));
+  const weights = grades.filter(g => !isNaN(parseFloat(g.grade))).map(g => g.weight||1);
+  const avg = weights.length > 0 ? (numeric.reduce((a,b)=>a+b,0) / weights.reduce((a,b)=>a+b,0)) : null;
+  const best = grades.filter(g=>!isNaN(parseFloat(g.grade))).reduce((a,b)=>parseFloat(b.grade)>parseFloat(a)||a===0?parseFloat(b.grade):a, 0);
+  const absences = grades.filter(g=>g.grade==='NB').length;
+  setInner('g-avg', avg ? avg.toFixed(2) : '—');
+  setInner('g-best', best||'—');
+  setInner('g-absences', absences);
+  setInner('g-count', grades.length);
+  const list = document.getElementById('grades-list');
+  if (!list) return;
+  if (grades.length === 0) { list.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📊</div><div class="empty-state-title">Brak ocen</div></div>'; return; }
+  const gradeColor = g => ({6:'var(--accent3)',5:'var(--accent3)',4:'var(--accent2)',3:'var(--accent5)',2:'var(--accent)',1:'var(--danger)',NB:'var(--ink3)'}[g]||'var(--ink)');
+  list.innerHTML = [...grades].sort((a,b)=>b.date.localeCompare(a.date)).map(g => `
+    <div class="reminder-item normal" style="cursor:default;">
+      <div class="reminder-icon" style="font-size:22px;font-weight:800;color:${gradeColor(g.grade)};font-family:var(--font-display,'Fraunces',serif);">${g.grade}</div>
+      <div class="reminder-content">
+        <div class="reminder-title">${g.subject}</div>
+        <div class="reminder-meta">${g.teacher||''}${g.notes?' · '+g.notes:''}</div>
+      </div>
+      <div class="reminder-right">
+        <div class="reminder-date">${formatDate(g.date)}</div>
+        <div style="margin-top:3px;"><span class="stag stag-info">waga ${g.weight||1}</span></div>
+      </div>
+      <button class="btn btn-danger btn-xs" onclick="deleteGrade(${g.id})" style="margin-left:8px;">🗑️</button>
+    </div>`).join('');
+}
+
+function deleteGrade(id) {
+  const cp = currentProfile();
+  cp.grades = (cp.grades||[]).filter(g=>g.id!==id);
+  autoSave(); renderGrades();
+}
+
+// ════════════════════════════════════════════════════════
+// SCHEDULE MODULE
+// ════════════════════════════════════════════════════════
+function saveScheduleItem() {
+  const subject = document.getElementById('sch-subject').value.trim();
+  if (!subject) { showToast('⚠️ Podaj przedmiot', 'error'); return; }
+  const cp = currentProfile();
+  if (!cp.schedule) cp.schedule = [];
+  cp.schedule.push({
+    id: Date.now(),
+    day: document.getElementById('sch-day').value,
+    time: document.getElementById('sch-time').value,
+    subject, teacher: document.getElementById('sch-teacher').value,
+    room: document.getElementById('sch-room').value,
+    type: document.getElementById('sch-type').value,
+    note: document.getElementById('sch-note').value,
+    createdAt: new Date().toISOString()
+  });
+  autoSave(); closeModal('addScheduleItem'); renderScheduleDay(document.getElementById('sch-day').value);
+  showToast('✅ Zapisano', 'success');
+}
+
+function renderScheduleDay(day, tabEl) {
+  if (tabEl) {
+    document.querySelectorAll('#schedule-tabs .tab').forEach(t=>t.classList.remove('active'));
+    tabEl.classList.add('active');
+  }
+  const cp = currentProfile();
+  const items = (cp.schedule||[]).filter(s=>s.day===day).sort((a,b)=>a.time.localeCompare(b.time));
+  const div = document.getElementById('schedule-day-list');
+  if (!div) return;
+  const typeIcon = {lesson:'📖',homework:'✏️',test:'📝',project:'📋'};
+  const typeLabel = {lesson:'Lekcja',homework:'Zadanie',test:'Sprawdzian',project:'Projekt'};
+  if (items.length===0) { div.innerHTML='<div class="empty-state"><div class="empty-state-icon">📅</div><div class="empty-state-title">Brak wpisów na ten dzień</div></div>'; return; }
+  div.innerHTML = items.map(s=>`
+    <div class="reminder-item normal">
+      <div class="reminder-icon">${typeIcon[s.type]||'📖'}</div>
+      <div class="reminder-content">
+        <div class="reminder-title">${s.subject} ${s.room?'· sala '+s.room:''}</div>
+        <div class="reminder-meta">${typeLabel[s.type]||''}${s.teacher?' · '+s.teacher:''}${s.note?' · '+s.note:''}</div>
+      </div>
+      <div class="reminder-right"><div class="reminder-date">${s.time||'—'}</div></div>
+      <button class="btn btn-danger btn-xs" onclick="deleteScheduleItem(${s.id})" style="margin-left:8px;">🗑️</button>
+    </div>`).join('');
+}
+
+function deleteScheduleItem(id) {
+  const cp = currentProfile();
+  cp.schedule = (cp.schedule||[]).filter(s=>s.id!==id);
+  autoSave();
+  const activeTab = document.querySelector('#schedule-tabs .tab.active');
+  const days=['Poniedziałek','Wtorek','Środa','Czwartek','Piątek'];
+  const tabIdx = [...document.querySelectorAll('#schedule-tabs .tab')].indexOf(activeTab);
+  renderScheduleDay(days[tabIdx]||'Poniedziałek');
+}
+
+// ════════════════════════════════════════════════════════
+// ACTIVITIES MODULE
+// ════════════════════════════════════════════════════════
+function saveActivity() {
+  const name = document.getElementById('act-name').value.trim();
+  if (!name) { showToast('⚠️ Podaj nazwę', 'error'); return; }
+  const cp = currentProfile();
+  if (!cp.activities) cp.activities = [];
+  cp.activities.push({
+    id: Date.now(), name,
+    cat: document.getElementById('act-cat').value,
+    day: document.getElementById('act-day').value,
+    time: document.getElementById('act-time').value,
+    teacher: document.getElementById('act-teacher').value,
+    cost: parseFloat(document.getElementById('act-cost').value)||0,
+    place: document.getElementById('act-place').value,
+    notes: document.getElementById('act-notes').value,
+    createdAt: new Date().toISOString()
+  });
+  autoSave(); closeModal('addActivity'); renderActivities();
+  showToast('✅ Zajęcia zapisane', 'success');
+}
+
+function renderActivities() {
+  const cp = currentProfile();
+  const acts = cp.activities || [];
+  const div = document.getElementById('activities-grid');
+  if (!div) return;
+  const catIcon = {sport:'⚽',music:'🎵',art:'🎨',science:'🔬',language:'🌍',other:'📚'};
+  const catColor = {sport:'var(--accent2)',music:'var(--accent4)',art:'var(--accent)',science:'var(--accent3)',language:'var(--accent5)',other:'var(--ink3)'};
+  if (acts.length===0) { div.innerHTML='<div class="empty-state" style="grid-column:1/-1"><div class="empty-state-icon">⚽</div><div class="empty-state-title">Brak zajęć dodatkowych</div></div>'; return; }
+  div.innerHTML = acts.map(a=>`
+    <div class="card">
+      <div class="card-header">
+        <div class="card-label" style="color:${catColor[a.cat]||'var(--ink3)'};">${catIcon[a.cat]||'📚'} ${a.cat}</div>
+        ${a.cost>0?`<span class="stag stag-info">${a.cost} zł/mies.</span>`:''}
+      </div>
+      <div class="card-title">${a.name}</div>
+      <div class="card-date">📅 ${a.day}${a.time?' · '+a.time:''}</div>
+      ${a.teacher?`<div class="card-desc">👤 ${a.teacher}</div>`:''}
+      ${a.place?`<div class="card-desc">📍 ${a.place}</div>`:''}
+      ${a.notes?`<div class="card-desc" style="margin-top:6px;">${a.notes}</div>`:''}
+      <div class="card-actions"><button class="btn btn-danger btn-xs" onclick="deleteActivity(${a.id})">🗑️ Usuń</button></div>
+    </div>`).join('');
+}
+
+function deleteActivity(id) {
+  const cp = currentProfile();
+  cp.activities = (cp.activities||[]).filter(a=>a.id!==id);
+  autoSave(); renderActivities();
+}
+
+// ════════════════════════════════════════════════════════
+// SLEEP MODULE
+// ════════════════════════════════════════════════════════
+function saveSleep() {
+  const cp = currentProfile();
+  if (!cp.sleep) cp.sleep = [];
+  cp.sleep.push({
+    id: Date.now(),
+    date: document.getElementById('sl-date').value,
+    hours: parseFloat(document.getElementById('sl-hours').value)||0,
+    mood: parseInt(document.getElementById('sl-mood').value),
+    energy: parseInt(document.getElementById('sl-energy').value),
+    notes: document.getElementById('sl-notes').value,
+    createdAt: new Date().toISOString()
+  });
+  autoSave(); closeModal('addSleep'); renderSleep();
+  showToast('😴 Wpis zapisany', 'success');
+}
+
+function renderSleep() {
+  const cp = currentProfile();
+  const entries = cp.sleep || [];
+  const avgH = entries.length ? (entries.reduce((a,b)=>a+b.hours,0)/entries.length).toFixed(1) : '—';
+  const avgM = entries.length ? (entries.reduce((a,b)=>a+b.mood,0)/entries.length).toFixed(1) : '—';
+  setInner('sl-avg', avgH); setInner('sl-mood', avgM); setInner('sl-count', entries.length);
+  const div = document.getElementById('sleep-list');
+  if (!div) return;
+  const moodEmoji = {5:'😄',4:'🙂',3:'😐',2:'😔',1:'😢'};
+  if (entries.length===0) { div.innerHTML='<div class="empty-state"><div class="empty-state-icon">😴</div><div class="empty-state-title">Brak wpisów</div></div>'; return; }
+  div.innerHTML = [...entries].sort((a,b)=>b.date.localeCompare(a.date)).map(e=>`
+    <div class="reminder-item normal">
+      <div class="reminder-icon">${moodEmoji[e.mood]||'😐'}</div>
+      <div class="reminder-content">
+        <div class="reminder-title">${e.hours}h snu · nastrój ${e.mood}/5 · energia ${e.energy}/5</div>
+        <div class="reminder-meta">${e.notes||''}</div>
+      </div>
+      <div class="reminder-right"><div class="reminder-date">${formatDate(e.date)}</div></div>
+      <button class="btn btn-danger btn-xs" onclick="deleteSleep(${e.id})" style="margin-left:8px;">🗑️</button>
+    </div>`).join('');
+}
+
+function deleteSleep(id) {
+  const cp = currentProfile();
+  cp.sleep = (cp.sleep||[]).filter(e=>e.id!==id);
+  autoSave(); renderSleep();
+}
+
+// ════════════════════════════════════════════════════════
+// NUTRITION MODULE
+// ════════════════════════════════════════════════════════
+function saveMeal() {
+  const cp = currentProfile();
+  if (!cp.meals) cp.meals = [];
+  cp.meals.push({
+    id: Date.now(),
+    date: document.getElementById('meal-date').value,
+    type: document.getElementById('meal-type').value,
+    desc: document.getElementById('meal-desc').value,
+    quality: parseInt(document.getElementById('meal-quality').value),
+    water: parseInt(document.getElementById('meal-water').value)||0,
+    createdAt: new Date().toISOString()
+  });
+  autoSave(); closeModal('addMeal'); renderNutrition();
+  showToast('🍎 Posiłek zapisany', 'success');
+}
+
+function renderNutrition() {
+  const cp = currentProfile();
+  const meals = cp.meals || [];
+  const today = new Date().toISOString().split('T')[0];
+  const todayMeals = meals.filter(m=>m.date===today);
+  const todayWater = todayMeals.reduce((a,b)=>a+b.water,0);
+  const avgQ = meals.length ? (meals.reduce((a,b)=>a+b.quality,0)/meals.length).toFixed(1) : '—';
+  setInner('nu-meals', todayMeals.length);
+  setInner('nu-water', todayWater);
+  setInner('nu-score', avgQ);
+  const div = document.getElementById('nutrition-list');
+  if (!div) return;
+  const typeIcon = {breakfast:'🌅',lunch:'🌞',dinner:'🌙',snack:'🍪'};
+  if (meals.length===0) { div.innerHTML='<div class="empty-state"><div class="empty-state-icon">🍎</div><div class="empty-state-title">Brak wpisów</div></div>'; return; }
+  div.innerHTML = [...meals].sort((a,b)=>b.date.localeCompare(a.date)).map(m=>`
+    <div class="reminder-item normal">
+      <div class="reminder-icon">${typeIcon[m.type]||'🍽️'}</div>
+      <div class="reminder-content">
+        <div class="reminder-title">${m.desc||'—'}</div>
+        <div class="reminder-meta">Jakość: ${'⭐'.repeat(m.quality)} · Woda: ${m.water} szkl.</div>
+      </div>
+      <div class="reminder-right"><div class="reminder-date">${formatDate(m.date)}</div></div>
+      <button class="btn btn-danger btn-xs" onclick="deleteMeal(${m.id})" style="margin-left:8px;">🗑️</button>
+    </div>`).join('');
+}
+
+function deleteMeal(id) {
+  const cp = currentProfile();
+  cp.meals = (cp.meals||[]).filter(m=>m.id!==id);
+  autoSave(); renderNutrition();
+}
+
+// ════════════════════════════════════════════════════════
+// FINANCE MODULE
+// ════════════════════════════════════════════════════════
+function saveFinance() {
+  const title = document.getElementById('fi-title').value.trim();
+  if (!title) { showToast('⚠️ Podaj tytuł', 'error'); return; }
+  const cp = currentProfile();
+  if (!cp.finances) cp.finances = [];
+  cp.finances.push({
+    id: Date.now(), title,
+    type: document.getElementById('fi-type').value,
+    amount: parseFloat(document.getElementById('fi-amount').value)||0,
+    date: document.getElementById('fi-date').value,
+    cat: document.getElementById('fi-cat').value,
+    notes: document.getElementById('fi-notes').value,
+    createdAt: new Date().toISOString()
+  });
+  autoSave(); closeModal('addFinance'); renderFinance();
+  showToast('💰 Wpis zapisany', 'success');
+}
+
+function renderFinance() {
+  const cp = currentProfile();
+  const fins = cp.finances || [];
+  const balance = fins.reduce((a,b)=>a+(b.type==='income'?b.amount:-b.amount),0);
+  const now = new Date();
+  const monthFins = fins.filter(f=>{const d=new Date(f.date);return d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear();});
+  const monthExp = monthFins.filter(f=>f.type==='expense').reduce((a,b)=>a+b.amount,0);
+  const pocket = fins.filter(f=>f.cat==='pocket').reduce((a,b)=>a+(b.type==='income'?b.amount:-b.amount),0);
+  setInner('fi-balance', balance.toFixed(2)+' zł');
+  setInner('fi-month', monthExp.toFixed(2)+' zł');
+  setInner('fi-pocket', pocket.toFixed(2)+' zł');
+  const div = document.getElementById('finance-list');
+  if (!div) return;
+  if (fins.length===0) { div.innerHTML='<div class="empty-state"><div class="empty-state-icon">💰</div><div class="empty-state-title">Brak wpisów</div></div>'; return; }
+  div.innerHTML = [...fins].sort((a,b)=>b.date.localeCompare(a.date)).map(f=>`
+    <div class="reminder-item ${f.type==='income'?'done':'urgent'}">
+      <div class="reminder-icon">${f.type==='income'?'💚':'❤️'}</div>
+      <div class="reminder-content">
+        <div class="reminder-title">${f.title}</div>
+        <div class="reminder-meta">${f.cat}${f.notes?' · '+f.notes:''}</div>
+      </div>
+      <div class="reminder-right">
+        <div class="reminder-date" style="font-size:14px;font-weight:700;color:${f.type==='income'?'var(--accent3)':'var(--danger)'};">${f.type==='income'?'+':'−'}${f.amount.toFixed(2)} zł</div>
+        <div style="font-size:11px;color:var(--ink3);">${formatDate(f.date)}</div>
+      </div>
+      <button class="btn btn-danger btn-xs" onclick="deleteFinance(${f.id})" style="margin-left:8px;">🗑️</button>
+    </div>`).join('');
+}
+
+function deleteFinance(id) {
+  const cp = currentProfile();
+  cp.finances = (cp.finances||[]).filter(f=>f.id!==id);
+  autoSave(); renderFinance();
 }
 
 // ════════════════════════════════════════════════════════
