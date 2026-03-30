@@ -314,12 +314,150 @@ main{overflow-y:auto;padding:24px;background:var(--bg);}
   .page{display:block!important;}
   .page:not(.active){display:none!important;}
 }
-/* ═══ RESPONSIVE ═══ */
+/* ═══ RESPONSIVE — MOBILE FIRST ═══ */
+
+/* iOS safe area support */
+:root {
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+}
+
+/* Hamburger button — hidden on desktop */
+#mob-menu-btn{display:none;background:none;border:none;cursor:pointer;padding:6px;flex-direction:column;gap:5px;flex-shrink:0;}
+#mob-menu-btn span{display:block;width:22px;height:2px;background:#fff;border-radius:2px;transition:all .2s;}
+#mob-menu-btn.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+#mob-menu-btn.open span:nth-child(2){opacity:0;}
+#mob-menu-btn.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+
+/* Mobile overlay for sidebar */
+#mob-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:150;}
+#mob-overlay.open{display:block;}
+
 @media(max-width:768px){
+  /* Layout */
   .layout{grid-template-columns:1fr;}
-  aside{display:none;}
-  main{padding:14px;}
+
+  /* Header mobile */
+  header{
+    padding:0 12px;
+    padding-top:var(--safe-top);
+    height:calc(52px + var(--safe-top));
+    gap:8px;
+  }
+  .logo{font-size:17px;}
+  .logo-badge{display:none;}
+  .header-center{display:none;}
+  /* Hide some header buttons on mobile, keep key ones */
+  .hbtn{padding:4px 8px;font-size:11px;}
+  #admin-lock-btn{display:none;}
+
+  /* Show hamburger */
+  #mob-menu-btn{display:flex;}
+
+  /* Sidebar — slides in from left */
+  aside{
+    position:fixed;
+    top:0;
+    left:-260px;
+    width:260px;
+    height:100vh;
+    z-index:200;
+    transition:left .25s ease;
+    padding-top:calc(16px + var(--safe-top));
+    box-shadow:none;
+  }
+  aside.open{
+    left:0;
+    box-shadow:4px 0 24px rgba(0,0,0,0.25);
+  }
+
+  /* Main content */
+  main{
+    padding:14px 12px;
+    padding-bottom:calc(80px + var(--safe-bottom));
+    min-height:calc(100vh - 52px - var(--safe-top));
+  }
+
+  /* Forms */
   .form-row{grid-template-columns:1fr;}
+  .form-row-3{grid-template-columns:1fr;}
+
+  /* Cards grid */
+  .cards-grid{grid-template-columns:1fr;}
+
+  /* Stats row — 2 cols on mobile */
+  .stats-row{grid-template-columns:1fr 1fr;}
+
+  /* Page header */
+  .page-header{flex-direction:column;align-items:flex-start;gap:8px;}
+  .page-title{font-size:20px;}
+
+  /* Profile hero */
+  .profile-hero{flex-wrap:wrap;gap:12px;}
+
+  /* Emergency card grid */
+  .ec-grid{grid-template-columns:1fr;}
+
+  /* Modals — full screen on mobile */
+  .modal-overlay{padding:0;align-items:flex-end;}
+  .modal{
+    max-width:100%;
+    width:100%;
+    border-radius:20px 20px 0 0;
+    max-height:92vh;
+    padding-bottom:calc(20px + var(--safe-bottom));
+  }
+  .modal-wide{max-width:100%;}
+
+  /* Storage cards — stack */
+  #storage-mode-cards{grid-template-columns:1fr!important;}
+
+  /* Growth stats — 3 cols still ok */
+  #growth-stats{grid-template-columns:1fr 1fr 1fr;}
+
+  /* Header buttons — show only essential */
+  .header-right{gap:4px;}
+
+  /* PWA banner bottom safe area */
+  #pwa-banner{padding-bottom:calc(12px + var(--safe-bottom));}
+
+  /* Bottom nav bar */
+  #mob-bottom-nav{display:flex;}
+}
+
+/* Bottom navigation bar — mobile only */
+#mob-bottom-nav{
+  display:none;
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  z-index:100;
+  background:var(--surface);
+  border-top:1px solid var(--border);
+  padding:8px 0;
+  padding-bottom:calc(8px + var(--safe-bottom));
+  justify-content:space-around;
+  align-items:center;
+}
+.mob-nav-item{
+  display:flex;flex-direction:column;align-items:center;gap:2px;
+  cursor:pointer;color:var(--ink3);font-size:9px;font-weight:600;
+  padding:4px 10px;border-radius:8px;transition:color .15s;
+  text-transform:uppercase;letter-spacing:.3px;
+  -webkit-tap-highlight-color:transparent;
+}
+.mob-nav-item .mob-nav-icon{font-size:20px;line-height:1;}
+.mob-nav-item.active{color:var(--accent);}
+.mob-nav-item:active{background:var(--bg);}
+
+@media(max-width:420px){
+  .stats-row{grid-template-columns:1fr 1fr;}
+  #growth-stats{grid-template-columns:1fr 1fr;}
+  main{padding:10px 8px;}
+  header{padding:0 8px;padding-top:var(--safe-top);}
 }
 
 /* DOT COLORS */
@@ -370,8 +508,14 @@ main{overflow-y:auto;padding:24px;background:var(--bg);}
   </div>
 </div>
 
+<!-- MOBILE OVERLAY -->
+<div id="mob-overlay" onclick="closeMobMenu()"></div>
+
 <!-- HEADER -->
 <header>
+  <button id="mob-menu-btn" onclick="toggleMobMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
   <div class="logo">Kidz<span>File</span> <span class="logo-badge">PRO</span></div>
   <div class="header-center">
     <div class="save-status saved" id="save-status">✓ Zapisano</div>
@@ -380,11 +524,29 @@ main{overflow-y:auto;padding:24px;background:var(--bg);}
   <div class="header-right">
     <button class="hbtn" onclick="toggleTheme()" id="theme-btn">🌙 Tryb</button>
     <button class="hbtn" id="admin-lock-btn" onclick="toggleAdminMode()">🔓 ADMIN</button>
-    <button class="hbtn" onclick="openStoragePanel()">☁️ Magazyn</button>
-    <button class="hbtn" onclick="exportData()">⬇️ Eksport</button>
-    <button class="hbtn" onclick="printView()">🖨️</button>
+    <button class="hbtn" onclick="openStoragePanel()">☁️</button>
+    <button class="hbtn" onclick="exportData()">⬇️</button>
   </div>
 </header>
+
+<!-- MOBILE BOTTOM NAV -->
+<nav id="mob-bottom-nav">
+  <div class="mob-nav-item active" id="mbn-dashboard" onclick="showPage('dashboard',null);setMobNav('dashboard')">
+    <div class="mob-nav-icon">🏠</div>Pulpit
+  </div>
+  <div class="mob-nav-item" id="mbn-reminders" onclick="showPage('reminders',null);setMobNav('reminders')">
+    <div class="mob-nav-icon">🔔</div>Alarm
+  </div>
+  <div class="mob-nav-item" id="mbn-vaccines" onclick="showPage('vaccines',null);setMobNav('vaccines')">
+    <div class="mob-nav-icon">💉</div>Zdrowie
+  </div>
+  <div class="mob-nav-item" id="mbn-documents" onclick="showPage('documents',null);setMobNav('documents')">
+    <div class="mob-nav-icon">📁</div>Pliki
+  </div>
+  <div class="mob-nav-item" id="mbn-sidebar" onclick="toggleMobMenu()">
+    <div class="mob-nav-icon">☰</div>Więcej
+  </div>
+</nav>
 
 <div class="layout">
 <!-- SIDEBAR -->
@@ -2377,6 +2539,49 @@ function checkIOSInstall() {
     };
   }
 }
+
+// ════════════════════════════════════════════════════════
+// MOBILE NAV — hamburger + bottom bar
+// ════════════════════════════════════════════════════════
+function toggleMobMenu() {
+  const aside = document.querySelector('aside');
+  const overlay = document.getElementById('mob-overlay');
+  const btn = document.getElementById('mob-menu-btn');
+  const isOpen = aside.classList.contains('open');
+  if (isOpen) {
+    aside.classList.remove('open');
+    overlay.classList.remove('open');
+    btn.classList.remove('open');
+  } else {
+    aside.classList.add('open');
+    overlay.classList.add('open');
+    btn.classList.add('open');
+  }
+}
+
+function closeMobMenu() {
+  const aside = document.querySelector('aside');
+  const overlay = document.getElementById('mob-overlay');
+  const btn = document.getElementById('mob-menu-btn');
+  aside.classList.remove('open');
+  overlay.classList.remove('open');
+  btn.classList.remove('open');
+}
+
+function setMobNav(id) {
+  document.querySelectorAll('.mob-nav-item').forEach(el => el.classList.remove('active'));
+  const el = document.getElementById('mbn-' + id);
+  if (el) el.classList.add('active');
+}
+
+// Close sidebar on nav-item click (mobile)
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.nav-item').forEach(item => {
+    item.addEventListener('click', () => {
+      if (window.innerWidth <= 768) closeMobMenu();
+    });
+  });
+});
 
 checkIOSInstall();
 init();
