@@ -1,0 +1,2402 @@
+<!DOCTYPE html>
+<!--
+  KidzFile Pro 2026 — v2.0
+  System Zarządzania Zdrowiem i Dokumentami Dziecka
+  Licencja prywatna — do użytku własnego i rodzinnego.
+  © 2026 — Wszelkie prawa zastrzeżone.
+-->
+<html lang="pl" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KidzFile Pro 2026</title>
+<link rel="manifest" href="manifest.json">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="KidzFile">
+<meta name="theme-color" content="#d4622a">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,800;1,9..144,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ═══ THEME VARIABLES ═══ */
+[data-theme="light"] {
+  --bg:#f5f0e8;--surface:#fffdf8;--surface2:#fff9ee;
+  --border:#e8dfc8;--border2:#ccc0a8;
+  --ink:#1a1408;--ink2:#5a4e38;--ink3:#9a8e78;
+  --accent:#d4622a;--accent2:#2a6ed4;--accent3:#2ab87a;
+  --accent4:#9b2ad4;--accent5:#d4a22a;
+  --danger:#c0392b;--success:#1a7f37;
+  --header-bg:#1a1408;--header-text:#fff;
+  --shadow:0 2px 12px rgba(26,20,8,0.08);--shadow-lg:0 8px 32px rgba(26,20,8,0.12);
+  --input-bg:#fff;--card-bg:#fffdf8;
+}
+[data-theme="dark"] {
+  --bg:#0f0d08;--surface:#1a1510;--surface2:#1f1a13;
+  --border:#332d22;--border2:#4a4236;
+  --ink:#f0e8d8;--ink2:#c8b898;--ink3:#7a6e58;
+  --accent:#e07840;--accent2:#5a9ef0;--accent3:#45c880;
+  --accent4:#b84af0;--accent5:#e8b840;
+  --danger:#e05050;--success:#3ab860;
+  --header-bg:#120f0a;--header-text:#f0e8d8;
+  --shadow:0 2px 12px rgba(0,0,0,0.3);--shadow-lg:0 8px 32px rgba(0,0,0,0.4);
+  --input-bg:#1a1510;--card-bg:#1a1510;
+}
+:root { --r:12px; --r-sm:8px; }
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;font-size:14px;transition:background .2s,color .2s;}
+
+/* ═══ HEADER ═══ */
+header{background:var(--header-bg);color:var(--header-text);padding:0 20px;display:flex;align-items:center;justify-content:space-between;height:58px;position:sticky;top:0;z-index:200;box-shadow:0 2px 16px rgba(0,0,0,0.4);gap:12px;}
+.logo{font-family:'Fraunces',serif;font-size:20px;font-weight:800;letter-spacing:-0.5px;white-space:nowrap;}
+.logo span{color:var(--accent);}
+.logo-badge{font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;background:rgba(212,98,42,0.25);border:1px solid rgba(212,98,42,0.4);color:var(--accent);letter-spacing:.5px;vertical-align:middle;margin-left:6px;}
+.header-center{flex:1;display:flex;align-items:center;justify-content:center;gap:8px;}
+.save-status{font-size:11.5px;padding:3px 10px;border-radius:20px;font-weight:600;transition:all .3s;}
+.save-status.saved{background:rgba(42,184,122,0.15);color:#45c880;border:1px solid rgba(42,184,122,0.3);}
+.save-status.saving{background:rgba(212,98,42,0.15);color:var(--accent);border:1px solid rgba(212,98,42,0.3);}
+.save-status.unsaved{background:rgba(192,57,43,0.15);color:#e05050;border:1px solid rgba(192,57,43,0.3);}
+.header-right{display:flex;gap:6px;align-items:center;flex-shrink:0;}
+.hbtn{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.18);color:#fff;padding:5px 12px;border-radius:18px;cursor:pointer;font-size:12.5px;font-family:'DM Sans',sans-serif;font-weight:500;transition:background .2s;white-space:nowrap;}
+.hbtn:hover{background:rgba(255,255,255,0.2);}
+.hbtn.admin-on{background:rgba(42,184,122,0.2);border-color:rgba(42,184,122,0.4);color:#45c880;}
+.hbtn.admin-off{background:rgba(192,57,43,0.18);border-color:rgba(192,57,43,0.35);color:#e08080;}
+
+/* ═══ LAYOUT ═══ */
+.layout{display:grid;grid-template-columns:240px 1fr;min-height:calc(100vh - 58px);}
+aside{background:var(--surface);border-right:1px solid var(--border);padding:16px 0;display:flex;flex-direction:column;overflow-y:auto;position:sticky;top:58px;height:calc(100vh - 58px);}
+.sidebar-profile{padding:14px 16px;border-bottom:1px solid var(--border);margin-bottom:8px;}
+.sp-label{font-size:10px;color:var(--ink3);font-weight:600;letter-spacing:1px;text-transform:uppercase;margin-bottom:5px;}
+.sp-name{font-family:'Fraunces',serif;font-size:15px;font-weight:700;color:var(--ink);}
+.sp-meta{font-size:11.5px;color:var(--ink3);margin-top:2px;}
+.sp-switcher{display:flex;gap:4px;margin-top:8px;flex-wrap:wrap;}
+.profile-pill{padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;cursor:pointer;border:1.5px solid var(--border);background:var(--bg);color:var(--ink2);transition:all .15s;}
+.profile-pill.active{background:var(--accent);border-color:var(--accent);color:#fff;}
+.profile-pill.add-pill{border-style:dashed;color:var(--ink3);}
+.sidebar-section{padding:6px 16px 3px;font-size:10px;font-weight:700;letter-spacing:1.5px;color:var(--ink3);text-transform:uppercase;margin-top:6px;}
+.nav-item{display:flex;align-items:center;gap:9px;padding:8px 18px;cursor:pointer;color:var(--ink2);font-weight:500;font-size:13px;transition:all .15s;border-left:3px solid transparent;}
+.nav-item:hover{background:var(--bg);color:var(--ink);}
+.nav-item.active{background:var(--bg);color:var(--accent);border-left-color:var(--accent);font-weight:600;}
+.nav-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.nav-badge{margin-left:auto;background:var(--danger);color:#fff;border-radius:10px;padding:1px 6px;font-size:10px;font-weight:700;}
+
+main{overflow-y:auto;padding:24px;background:var(--bg);}
+.page{display:none;}.page.active{display:block;}
+
+/* ═══ PAGE HEADER ═══ */
+.page-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px;gap:12px;flex-wrap:wrap;}
+.page-title{font-family:'Fraunces',serif;font-size:26px;font-weight:800;color:var(--ink);line-height:1.1;}
+.page-sub{font-size:12.5px;color:var(--ink3);margin-top:3px;}
+
+/* ═══ BUTTONS ═══ */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:8px;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;transition:all .15s;}
+.btn-primary{background:var(--accent);color:#fff;}.btn-primary:hover{filter:brightness(0.9);}
+.btn-secondary{background:var(--surface);border:1px solid var(--border);color:var(--ink2);}.btn-secondary:hover{background:var(--bg);}
+.btn-danger{background:rgba(192,57,43,0.12);color:var(--danger);border:1px solid rgba(192,57,43,0.25);}
+.btn-success{background:rgba(42,184,122,0.12);color:var(--accent3);border:1px solid rgba(42,184,122,0.3);}
+.btn-blue{background:rgba(42,110,212,0.12);color:var(--accent2);border:1px solid rgba(42,110,212,0.3);}
+.btn-sm{padding:5px 11px;font-size:12px;}
+.btn-xs{padding:3px 8px;font-size:11px;}
+
+/* ═══ CARDS ═══ */
+.cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:14px;margin-bottom:20px;}
+.card{background:var(--card-bg);border:1px solid var(--border);border-radius:var(--r);padding:16px;box-shadow:var(--shadow);transition:box-shadow .2s;}
+.card:hover{box-shadow:var(--shadow-lg);}
+.card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.card-label{display:flex;align-items:center;gap:7px;font-size:10.5px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--ink3);}
+.card-title{font-family:'Fraunces',serif;font-size:16px;font-weight:600;margin-bottom:4px;color:var(--ink);}
+.card-date{font-size:11.5px;color:var(--ink3);margin-bottom:6px;}
+.card-desc{font-size:12.5px;color:var(--ink2);line-height:1.5;}
+.card-actions{display:flex;gap:5px;margin-top:10px;flex-wrap:wrap;}
+
+/* ═══ STATUS TAGS ═══ */
+.stag{display:inline-block;padding:2px 8px;border-radius:20px;font-size:10.5px;font-weight:700;}
+.stag-upcoming{background:#fff3cd;color:#856404;}
+.stag-done{background:#d1e7dd;color:#0f5132;}
+.stag-overdue{background:#f8d7da;color:#842029;}
+.stag-info{background:#cfe2ff;color:#084298;}
+
+/* ═══ PROFILE CARD ═══ */
+.profile-hero{background:var(--ink);border-radius:var(--r);padding:20px;color:#fff;display:flex;align-items:center;gap:18px;margin-bottom:20px;position:relative;overflow:hidden;}
+.profile-hero::before{content:'';position:absolute;right:-20px;top:-20px;width:140px;height:140px;border-radius:50%;background:rgba(212,98,42,0.18);}
+.profile-avatar{width:64px;height:64px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-size:24px;font-weight:800;color:#fff;flex-shrink:0;cursor:pointer;overflow:hidden;}
+.profile-avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
+.profile-info{flex:1;}
+.profile-name{font-family:'Fraunces',serif;font-size:20px;font-weight:800;}
+.profile-meta{font-size:12.5px;opacity:.7;margin-top:3px;}
+.profile-badges{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap;}
+.badge{padding:2px 9px;border-radius:20px;font-size:11px;font-weight:600;}
+.badge-blue{background:rgba(42,110,212,0.3);color:#7ab0ff;}
+.badge-orange{background:rgba(212,98,42,0.3);color:#ffaa7a;}
+.badge-green{background:rgba(42,184,122,0.3);color:#7affc2;}
+
+/* ═══ STATS ROW ═══ */
+.stats-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;margin-bottom:20px;}
+.stat-card{background:var(--card-bg);border:1px solid var(--border);border-radius:var(--r);padding:14px;text-align:center;}
+.stat-number{font-family:'Fraunces',serif;font-size:30px;font-weight:800;line-height:1;}
+.stat-label{font-size:10.5px;color:var(--ink3);font-weight:600;letter-spacing:.5px;margin-top:3px;}
+
+/* ═══ REMINDER ITEMS ═══ */
+.reminder-list{display:flex;flex-direction:column;gap:8px;}
+.reminder-item{background:var(--card-bg);border:1px solid var(--border);border-radius:var(--r-sm);padding:12px 14px;display:flex;align-items:center;gap:12px;}
+.reminder-item.urgent{border-left:3px solid var(--accent);}
+.reminder-item.normal{border-left:3px solid var(--accent2);}
+.reminder-item.done{border-left:3px solid var(--accent3);opacity:.7;}
+.reminder-item.overdue{border-left:3px solid var(--danger);}
+.reminder-icon{font-size:20px;width:32px;text-align:center;flex-shrink:0;}
+.reminder-content{flex:1;}
+.reminder-title{font-weight:600;font-size:13px;}
+.reminder-meta{font-size:11.5px;color:var(--ink3);margin-top:2px;}
+.reminder-right{text-align:right;flex-shrink:0;}
+.reminder-date{font-size:11.5px;font-weight:600;color:var(--ink2);}
+
+/* ═══ FORM ═══ */
+.form-group{margin-bottom:14px;}
+.form-label{display:block;font-size:11.5px;font-weight:700;color:var(--ink2);margin-bottom:5px;text-transform:uppercase;letter-spacing:.5px;}
+.form-input,.form-select,.form-textarea{width:100%;padding:9px 13px;border:1.5px solid var(--border);border-radius:var(--r-sm);background:var(--input-bg);color:var(--ink);font-family:'DM Sans',sans-serif;font-size:14px;transition:border-color .15s;}
+.form-input:focus,.form-select:focus,.form-textarea:focus{outline:none;border-color:var(--accent);}
+.form-textarea{resize:vertical;min-height:75px;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.form-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+
+/* ═══ MODAL ═══ */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(26,20,8,0.55);z-index:1000;align-items:center;justify-content:center;padding:16px;}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--card-bg);border-radius:var(--r);padding:24px;width:100%;max-width:540px;max-height:88vh;overflow-y:auto;box-shadow:var(--shadow-lg);animation:mIn .2s ease;}
+.modal-wide{max-width:700px;}
+@keyframes mIn{from{transform:translateY(16px);opacity:0}to{transform:translateY(0);opacity:1}}
+.modal-title{font-family:'Fraunces',serif;font-size:19px;font-weight:800;margin-bottom:18px;color:var(--ink);}
+.modal-footer{display:flex;gap:8px;justify-content:flex-end;margin-top:18px;padding-top:14px;border-top:1px solid var(--border);}
+
+/* ═══ FILE DROP ═══ */
+.file-drop{border:2px dashed var(--border);border-radius:var(--r-sm);padding:20px;text-align:center;cursor:pointer;transition:all .2s;background:var(--bg);}
+.file-drop:hover,.file-drop.dragover{border-color:var(--accent);background:rgba(212,98,42,0.05);}
+.file-preview-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(72px,1fr));gap:6px;margin-top:10px;}
+.file-preview-item{border-radius:6px;overflow:hidden;border:1px solid var(--border);aspect-ratio:1;position:relative;background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:22px;}
+.file-preview-item img{width:100%;height:100%;object-fit:cover;}
+.file-preview-remove{position:absolute;top:2px;right:2px;background:rgba(0,0,0,0.6);color:#fff;border-radius:50%;width:16px;height:16px;font-size:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;}
+
+/* ═══ TABS ═══ */
+.tabs{display:flex;gap:3px;margin-bottom:18px;background:var(--card-bg);border:1px solid var(--border);border-radius:var(--r-sm);padding:3px;}
+.tab{flex:1;padding:6px 10px;border-radius:6px;text-align:center;cursor:pointer;font-size:12px;font-weight:600;color:var(--ink3);transition:all .15s;}
+.tab.active{background:var(--accent);color:#fff;}
+
+/* ═══ TIMELINE ═══ */
+.timeline{position:relative;padding-left:22px;}
+.timeline::before{content:'';position:absolute;left:6px;top:0;bottom:0;width:2px;background:var(--border);}
+.timeline-item{position:relative;padding-bottom:18px;cursor:pointer;}
+.timeline-dot{position:absolute;left:-20px;top:3px;width:12px;height:12px;border-radius:50%;border:2px solid var(--card-bg);box-shadow:0 0 0 2px var(--border);}
+.timeline-date{font-size:10.5px;color:var(--ink3);font-weight:700;margin-bottom:3px;}
+.timeline-content{background:var(--card-bg);border:1px solid var(--border);border-radius:var(--r-sm);padding:10px 12px;}
+.timeline-title{font-weight:600;font-size:13px;}
+.timeline-desc{font-size:11.5px;color:var(--ink2);margin-top:2px;}
+
+/* ═══ GROWTH CHART ═══ */
+.growth-table{width:100%;border-collapse:collapse;}
+.growth-table th{background:var(--bg);padding:8px 12px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--ink3);text-align:left;border-bottom:2px solid var(--border);}
+.growth-table td{padding:8px 12px;border-bottom:1px solid var(--border);font-size:13px;}
+.growth-table tr:hover td{background:var(--bg);}
+.bmi-normal{color:var(--accent3);font-weight:700;}
+.bmi-warn{color:var(--accent5);font-weight:700;}
+.bmi-alert{color:var(--danger);font-weight:700;}
+
+/* ═══ MEDICATION CARD ═══ */
+.med-card{background:var(--card-bg);border:1px solid var(--border);border-radius:var(--r);padding:14px;display:flex;align-items:flex-start;gap:12px;}
+.med-icon{width:40px;height:40px;border-radius:8px;background:rgba(155,42,212,0.12);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.med-info{flex:1;}
+.med-name{font-weight:700;font-size:14px;color:var(--ink);}
+.med-dose{font-size:12px;color:var(--ink2);margin-top:2px;}
+.med-active{border-left:3px solid var(--accent3);}
+.med-ended{border-left:3px solid var(--ink3);opacity:.6;}
+
+/* ═══ ALLERGY CARD ═══ */
+.allergy-item{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--card-bg);border:1px solid var(--border);border-radius:var(--r-sm);}
+.allergy-sev-high{border-left:4px solid var(--danger);}
+.allergy-sev-medium{border-left:4px solid var(--accent5);}
+.allergy-sev-low{border-left:4px solid var(--accent2);}
+.allergy-name{font-weight:700;font-size:13px;}
+.allergy-reaction{font-size:12px;color:var(--ink2);}
+
+/* ═══ VACCINE STATUS ═══ */
+.vaccine-row{display:flex;align-items:center;gap:12px;padding:9px 14px;background:var(--card-bg);border:1px solid var(--border);border-radius:var(--r-sm);}
+.vac-check{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;}
+.vac-done{background:rgba(42,184,122,0.2);color:var(--accent3);}
+.vac-pending{background:rgba(212,98,42,0.15);color:var(--accent);}
+.vac-overdue{background:rgba(192,57,43,0.15);color:var(--danger);}
+.vac-name{flex:1;font-size:13px;font-weight:600;}
+.vac-date{font-size:11.5px;color:var(--ink3);}
+
+/* ═══ EMERGENCY CARD ═══ */
+.emergency-card{background:linear-gradient(135deg,#c0392b,#922b21);color:#fff;border-radius:var(--r);padding:20px;margin-bottom:20px;}
+.emergency-title{font-family:'Fraunces',serif;font-size:22px;font-weight:800;margin-bottom:14px;display:flex;align-items:center;gap:10px;}
+.ec-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.ec-field label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;opacity:.7;display:block;margin-bottom:3px;}
+.ec-field span{font-size:14px;font-weight:600;}
+
+/* ═══ INFO BOX ═══ */
+.info-box{background:rgba(42,110,212,0.1);border:1px solid rgba(42,110,212,0.25);border-radius:var(--r-sm);padding:10px 14px;font-size:12.5px;color:var(--ink2);line-height:1.6;margin-bottom:14px;}
+.info-box strong{color:var(--accent2);}
+.warn-box{background:rgba(212,162,42,0.12);border:1px solid rgba(212,162,42,0.3);border-radius:var(--r-sm);padding:10px 14px;font-size:12.5px;color:var(--ink2);margin-bottom:14px;}
+
+/* ═══ SEARCH BAR ═══ */
+.search-bar{display:flex;gap:8px;margin-bottom:16px;align-items:center;}
+.search-wrap{flex:1;position:relative;}
+.search-wrap::before{content:'🔍';position:absolute;left:11px;top:50%;transform:translateY(-50%);font-size:13px;}
+.search-input{width:100%;padding:8px 12px 8px 34px;border:1.5px solid var(--border);border-radius:var(--r-sm);background:var(--card-bg);color:var(--ink);font-family:'DM Sans',sans-serif;font-size:13.5px;}
+.search-input:focus{outline:none;border-color:var(--accent);}
+
+/* ═══ SECTION DIVIDER ═══ */
+.section-title{font-family:'Fraunces',serif;font-size:18px;font-weight:700;color:var(--ink);margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.section-title::after{content:'';flex:1;height:1px;background:var(--border);}
+
+/* ═══ TOAST ═══ */
+#toast{position:fixed;bottom:18px;right:18px;background:var(--ink);color:var(--bg);padding:11px 18px;border-radius:var(--r-sm);font-size:13px;font-weight:500;box-shadow:var(--shadow-lg);z-index:9999;transform:translateY(80px);opacity:0;transition:all .3s;max-width:300px;}
+#toast.show{transform:translateY(0);opacity:1;}
+#toast.success{background:var(--success);color:#fff;}
+#toast.error{background:var(--danger);color:#fff;}
+
+/* ═══ EMPTY STATE ═══ */
+.empty-state{text-align:center;padding:40px 20px;color:var(--ink3);}
+.empty-state-icon{font-size:44px;margin-bottom:10px;}
+.empty-state-title{font-family:'Fraunces',serif;font-size:17px;color:var(--ink2);margin-bottom:5px;}
+
+/* ═══ ADMIN MODAL ═══ */
+#admin-modal{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:9999;display:flex;align-items:center;justify-content:center;}
+#admin-modal .am-box{background:var(--card-bg);border:1.5px solid var(--border2);border-radius:14px;padding:26px 28px;width:300px;box-shadow:0 8px 40px rgba(0,0,0,.5);}
+#admin-modal h3{margin:0 0 5px;font-family:'Fraunces',serif;font-size:17px;color:var(--ink);}
+#admin-modal p{margin:0 0 14px;font-size:12px;color:var(--ink2);}
+#admin-modal input{width:100%;background:var(--input-bg);border:1px solid var(--border2);border-radius:7px;padding:9px 12px;color:var(--ink);font-size:15px;outline:none;margin-bottom:8px;}
+#admin-modal input:focus{border-color:var(--accent);}
+#admin-modal .am-err{color:var(--danger);font-size:12px;margin-bottom:8px;display:none;padding:5px 9px;background:rgba(192,57,43,.1);border-radius:5px;border:1px solid rgba(192,57,43,.25);}
+#admin-modal .am-btns{display:flex;gap:7px;justify-content:flex-end;}
+
+/* ═══ FIRST RUN ═══ */
+#first-run{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:10000;align-items:center;justify-content:center;}
+#first-run .fr-box{background:var(--card-bg);border:2px solid var(--accent);border-radius:16px;padding:30px 32px;width:95%;max-width:400px;box-shadow:0 16px 60px rgba(0,0,0,.7);}
+
+/* ═══ STORAGE SETTINGS ═══ */
+.storage-mode-card{border:2px solid var(--border);border-radius:var(--r);padding:16px;cursor:pointer;transition:all .2s;}
+.storage-mode-card.selected{border-color:var(--accent);background:rgba(212,98,42,0.05);}
+.storage-mode-card h4{font-size:14px;font-weight:700;margin-bottom:4px;}
+.storage-mode-card p{font-size:12px;color:var(--ink2);}
+
+/* ═══ DOTS ═══ */
+.dot-school{background:var(--accent2);}
+.dot-doctor{background:var(--accent3);}
+.dot-dentist{background:#e67e22;}
+.dot-ortho{background:var(--accent4);}
+.dot-eye{background:#16a085;}
+.dot-vaccine{background:var(--accent);}
+.dot-bone{background:#8e44ad;}
+.dot-meds{background:#e74c3c;}
+.dot-other{background:var(--ink3);}
+.dot-growth{background:#27ae60;}
+.dot-allergy{background:#c0392b;}
+
+/* ═══ PRINT ═══ */
+
+/* ═══ PWA INSTALL BANNER ═══ */
+#pwa-banner{display:none;position:fixed;bottom:0;left:0;right:0;z-index:500;background:var(--header-bg);border-top:2px solid var(--accent);padding:12px 20px;display:flex;align-items:center;gap:14px;animation:slideUp .3s ease;}
+#pwa-banner.hidden{display:none!important;}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.pwa-icon{width:44px;height:44px;border-radius:10px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-size:16px;font-weight:800;color:#fff;flex-shrink:0;}
+.pwa-text{flex:1;}
+.pwa-text strong{color:var(--header-text);font-size:13px;display:block;}
+.pwa-text span{color:var(--ink3);font-size:11.5px;}
+.pwa-ios-steps{display:none;margin-top:8px;font-size:11.5px;color:var(--ink2);line-height:1.8;}
+/* ═══ ENCRYPTION STATUS ═══ */
+.enc-badge{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:12px;font-size:10px;font-weight:700;background:rgba(42,184,122,0.15);color:#2ab87a;border:1px solid rgba(42,184,122,0.3);}
+.enc-badge.off{background:rgba(192,57,43,0.12);color:#e05050;border-color:rgba(192,57,43,0.3);}
+@media print{
+  aside,header,.btn,.modal-overlay,.search-bar,.card-actions,.no-print{display:none!important;}
+  main{padding:0;}
+  body{background:#fff;color:#000;}
+  .page{display:block!important;}
+  .page:not(.active){display:none!important;}
+}
+/* ═══ RESPONSIVE ═══ */
+@media(max-width:768px){
+  .layout{grid-template-columns:1fr;}
+  aside{display:none;}
+  main{padding:14px;}
+  .form-row{grid-template-columns:1fr;}
+}
+
+/* DOT COLORS */
+.dot-label-school{color:var(--accent2);}
+.dot-label-dentist{color:#e67e22;}
+.dot-label-eye{color:#16a085;}
+</style>
+</head>
+<body>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<!-- ADMIN PASSWORD MODAL -->
+<div id="admin-modal" style="display:none;">
+  <div class="am-box">
+    <div style="font-size:28px;text-align:center;margin-bottom:10px;">🔐</div>
+    <h3 style="text-align:center">Tryb administratora</h3>
+    <p style="text-align:center">Podaj hasło administratora</p>
+    <input type="password" id="admin-pass-input" placeholder="Hasło…" onkeydown="if(event.key==='Enter')confirmAdminPass()">
+    <div class="am-err" id="admin-pass-err">❌ Nieprawidłowe hasło</div>
+    <div class="am-btns">
+      <button class="btn btn-secondary btn-sm" onclick="closeAdminModal()">Anuluj</button>
+      <button class="btn btn-primary btn-sm" onclick="confirmAdminPass()">🔓 Odblokuj</button>
+    </div>
+  </div>
+</div>
+
+<!-- FIRST RUN WIZARD -->
+<div id="first-run">
+  <div class="fr-box">
+    <div style="font-size:32px;text-align:center;margin-bottom:10px;">🔐</div>
+    <h3 style="font-family:'Fraunces',serif;font-size:19px;text-align:center;margin-bottom:6px;color:var(--ink)">Pierwsze uruchomienie</h3>
+    <p style="font-size:12.5px;color:var(--ink2);text-align:center;margin-bottom:18px;line-height:1.6">Ustaw hasło administratora. Będzie wymagane do edycji ustawień i danych wrażliwych.</p>
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <div>
+        <label class="form-label">Hasło administratora</label>
+        <input type="password" class="form-input" id="fr-pwd1" placeholder="min. 4 znaki…" onkeydown="if(event.key==='Enter')document.getElementById('fr-pwd2').focus()">
+      </div>
+      <div>
+        <label class="form-label">Powtórz hasło</label>
+        <input type="password" class="form-input" id="fr-pwd2" placeholder="powtórz hasło…" onkeydown="if(event.key==='Enter')completeFirstRun()">
+      </div>
+      <div id="fr-err" style="display:none;color:var(--danger);font-size:12px;padding:6px 10px;background:rgba(192,57,43,.1);border-radius:5px;border:1px solid rgba(192,57,43,.25);"></div>
+      <button class="btn btn-primary" onclick="completeFirstRun()" style="width:100%;justify-content:center;padding:11px;">✅ Ustaw hasło i zacznij</button>
+      <p style="font-size:11px;color:var(--ink3);text-align:center;line-height:1.5">Zapamiętaj hasło — bez niego nie edytujesz ustawień zabezpieczeń.</p>
+    </div>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header>
+  <div class="logo">Kidz<span>File</span> <span class="logo-badge">PRO</span></div>
+  <div class="header-center">
+    <div class="save-status saved" id="save-status">✓ Zapisano</div>
+    <span class="enc-badge" title="AES-256 szyfrowanie dostępne">🔒 AES-256</span>
+  </div>
+  <div class="header-right">
+    <button class="hbtn" onclick="toggleTheme()" id="theme-btn">🌙 Tryb</button>
+    <button class="hbtn" id="admin-lock-btn" onclick="toggleAdminMode()">🔓 ADMIN</button>
+    <button class="hbtn" onclick="openStoragePanel()">☁️ Magazyn</button>
+    <button class="hbtn" onclick="exportData()">⬇️ Eksport</button>
+    <button class="hbtn" onclick="printView()">🖨️</button>
+  </div>
+</header>
+
+<div class="layout">
+<!-- SIDEBAR -->
+<aside>
+  <div class="sidebar-profile">
+    <div class="sp-label">Aktywny profil</div>
+    <div class="sp-name" id="sb-name">—</div>
+    <div class="sp-meta" id="sb-meta">Brak danych</div>
+    <div class="sp-switcher" id="profile-switcher"></div>
+  </div>
+
+  <div class="sidebar-section">Nawigacja</div>
+  <div class="nav-item active" onclick="showPage('dashboard',this)">🏠 Pulpit</div>
+  <div class="nav-item" onclick="showPage('profile',this)">👤 Profil dziecka</div>
+  <div class="nav-item" onclick="showPage('reminders',this)">🔔 Przypomnienia <span class="nav-badge" id="overdue-badge" style="display:none">!</span></div>
+  <div class="nav-item" onclick="showPage('documents',this)">📁 Dokumenty</div>
+
+  <div class="sidebar-section">Zdrowie</div>
+  <div class="nav-item" onclick="showPage('vaccines',this)"><div class="nav-dot dot-vaccine"></div> Szczepienia</div>
+  <div class="nav-item" onclick="showPage('medications',this)"><div class="nav-dot dot-meds"></div> Leki & Recepty</div>
+  <div class="nav-item" onclick="showPage('allergies',this)"><div class="nav-dot dot-allergy"></div> Alergie</div>
+  <div class="nav-item" onclick="showPage('growth',this)"><div class="nav-dot dot-growth"></div> Wzrost & Waga</div>
+  <div class="nav-item" onclick="showPage('emergency',this)">🆘 Karta Alarmowa</div>
+
+  <div class="sidebar-section">Wizyty</div>
+  <div class="nav-item" onclick="showPage('doctor',this)"><div class="nav-dot dot-doctor"></div> Lekarz</div>
+  <div class="nav-item" onclick="showPage('dentist',this)"><div class="nav-dot dot-dentist"></div> Dentysta</div>
+  <div class="nav-item" onclick="showPage('orthodontist',this)"><div class="nav-dot dot-ortho"></div> Ortodonta</div>
+  <div class="nav-item" onclick="showPage('eye',this)"><div class="nav-dot dot-eye"></div> Okulista</div>
+  <div class="nav-item" onclick="showPage('bone',this)"><div class="nav-dot dot-bone"></div> Ortopeda</div>
+  <div class="nav-item" onclick="showPage('school',this)"><div class="nav-dot dot-school"></div> Szkoła</div>
+  <div class="nav-item" onclick="showPage('specialists',this)"><div class="nav-dot dot-other"></div> Inne specjalizacje</div>
+
+  <div class="sidebar-section">System</div>
+  <div class="nav-item" onclick="showPage('history',this)">📅 Historia zdarzeń</div>
+  <div class="nav-item" onclick="showPage('settings',this)">⚙️ Ustawienia & Bezpieczeństwo</div>
+  <div class="nav-item" onclick="backupFull()">☁️ Pełny backup</div>
+  <div class="nav-item" onclick="printView()">🖨️ Drukuj raport</div>
+</aside>
+
+<!-- MAIN -->
+<main>
+
+<!-- ═══ DASHBOARD ═══ -->
+<div class="page active" id="page-dashboard">
+  <div class="page-header">
+    <div><div class="page-title">Pulpit</div><div class="page-sub">Przegląd stanu zdrowia i spraw</div></div>
+    <button class="btn btn-primary" onclick="openModal('addEvent')">+ Nowe zdarzenie</button>
+  </div>
+  <div class="profile-hero" id="profile-hero">
+    <div class="profile-avatar" onclick="showPage('profile',null)" id="dash-avatar">?</div>
+    <div class="profile-info">
+      <div class="profile-name" id="dash-name">Brak profilu</div>
+      <div class="profile-meta" id="dash-meta">Uzupełnij dane dziecka →</div>
+      <div class="profile-badges" id="dash-badges"></div>
+    </div>
+    <button class="btn btn-sm" onclick="showPage('profile',null)" style="flex-shrink:0;background:rgba(255,255,255,0.15);border-color:rgba(255,255,255,0.3);color:#fff;">Edytuj</button>
+  </div>
+  <div class="stats-row" id="stats-row">
+    <div class="stat-card"><div class="stat-number" id="s-total">0</div><div class="stat-label">Wszystkich wpisów</div></div>
+    <div class="stat-card"><div class="stat-number" id="s-upcoming" style="color:var(--accent)">0</div><div class="stat-label">Nadchodzące</div></div>
+    <div class="stat-card"><div class="stat-number" id="s-overdue" style="color:var(--danger)">0</div><div class="stat-label">Zaległe</div></div>
+    <div class="stat-card"><div class="stat-number" id="s-done" style="color:var(--accent3)">0</div><div class="stat-label">Zrealizowane</div></div>
+    <div class="stat-card"><div class="stat-number" id="s-meds" style="color:var(--accent4)">0</div><div class="stat-label">Aktywne leki</div></div>
+  </div>
+  <div class="section-title">🔔 Najbliższe zdarzenia</div>
+  <div id="dash-upcoming" class="reminder-list"></div>
+</div>
+
+<!-- ═══ PROFILE ═══ -->
+<div class="page" id="page-profile">
+  <div class="page-header">
+    <div><div class="page-title">Profil dziecka</div><div class="page-sub">Dane osobowe, szkoła, opiekunowie</div></div>
+    <div style="display:flex;gap:8px;">
+      <button class="btn btn-secondary" onclick="addNewProfile()">+ Nowy profil</button>
+      <button class="btn btn-primary" onclick="saveProfile()">💾 Zapisz</button>
+    </div>
+  </div>
+  <div class="card">
+    <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;">
+      <div class="profile-avatar" id="profile-avatar-big" onclick="document.getElementById('avatar-file').click()" style="width:80px;height:80px;font-size:30px;cursor:pointer;">?</div>
+      <div>
+        <div style="font-size:13px;color:var(--ink2);margin-bottom:6px;">Kliknij avatar aby zmienić zdjęcie</div>
+        <input type="file" id="avatar-file" accept="image/*" style="display:none;" onchange="handleAvatarFile(event)">
+        <button class="btn btn-secondary btn-xs" onclick="clearAvatar()">Usuń zdjęcie</button>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Imię</label><input class="form-input" id="p-name" placeholder="Imię dziecka"></div>
+      <div class="form-group"><label class="form-label">Nazwisko</label><input class="form-input" id="p-surname" placeholder="Nazwisko"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Data urodzenia</label><input type="date" class="form-input" id="p-birth"></div>
+      <div class="form-group"><label class="form-label">PESEL</label><input class="form-input" id="p-pesel" placeholder="Opcjonalnie"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Klasa / Oddział</label><input class="form-input" id="p-class" placeholder="np. 3b"></div>
+      <div class="form-group"><label class="form-label">Szkoła</label><input class="form-input" id="p-school" placeholder="Nazwa szkoły"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Lekarz rodzinny</label><input class="form-input" id="p-doctor" placeholder="Dr…"></div>
+      <div class="form-group"><label class="form-label">Nr karty EKUZ / NFZ</label><input class="form-input" id="p-nfz" placeholder="Opcjonalnie"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Ubezpieczyciel</label><input class="form-input" id="p-insurer" placeholder="np. PZU, Allianz…"></div>
+      <div class="form-group"><label class="form-label">Nr polisy</label><input class="form-input" id="p-policy" placeholder="Nr polisy"></div>
+    </div>
+    <div class="form-group"><label class="form-label">Uwagi medyczne / Info dla ratowników</label><textarea class="form-textarea" id="p-medical-notes" placeholder="Przewlekłe choroby, szczególne potrzeby, informacje dla SOR…"></textarea></div>
+  </div>
+  <div class="card" style="margin-top:14px;">
+    <div class="section-title" style="font-size:15px;">👨‍👩‍👧 Opiekunowie</div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Opiekun 1 — imię i nazwisko</label><input class="form-input" id="p-par1-name" placeholder="Mama / Tata…"></div>
+      <div class="form-group"><label class="form-label">Telefon opiekuna 1</label><input class="form-input" id="p-par1-phone" placeholder="+48…"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Opiekun 2 — imię i nazwisko</label><input class="form-input" id="p-par2-name" placeholder="Mama / Tata…"></div>
+      <div class="form-group"><label class="form-label">Telefon opiekuna 2</label><input class="form-input" id="p-par2-phone" placeholder="+48…"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Email kontaktowy</label><input type="email" class="form-input" id="p-email" placeholder="email@rodziny.pl"></div>
+      <div class="form-group"><label class="form-label">Kontakt alarmowy — inna osoba</label><input class="form-input" id="p-emergency" placeholder="Imię, nazwisko, tel."></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ REMINDERS ═══ -->
+<div class="page" id="page-reminders">
+  <div class="page-header">
+    <div><div class="page-title">Przypomnienia</div><div class="page-sub">Nadchodzące, zaległe i zrealizowane zdarzenia</div></div>
+    <button class="btn btn-primary" onclick="openModal('addEvent')">+ Dodaj zdarzenie</button>
+  </div>
+  <div class="tabs" id="reminder-tabs">
+    <div class="tab active" onclick="filterReminders('upcoming',this)">Nadchodzące</div>
+    <div class="tab" onclick="filterReminders('overdue',this)">Zaległe</div>
+    <div class="tab" onclick="filterReminders('done',this)">Zrealizowane</div>
+    <div class="tab" onclick="filterReminders('all',this)">Wszystkie</div>
+  </div>
+  <div class="reminder-list" id="reminder-list"></div>
+</div>
+
+<!-- ═══ DOCUMENTS ═══ -->
+<div class="page" id="page-documents">
+  <div class="page-header">
+    <div><div class="page-title">Dokumenty & Media</div><div class="page-sub">Skany, zdjęcia, wyniki badań</div></div>
+    <button class="btn btn-primary" onclick="openModal('addDoc')">+ Dodaj dokument</button>
+  </div>
+  <div class="search-bar">
+    <div class="search-wrap"><input class="search-input" placeholder="Szukaj dokumentów…" oninput="renderDocuments('all',this.value)"></div>
+    <select class="form-select" style="width:auto;" onchange="renderDocuments(this.value)">
+      <option value="all">Wszystkie typy</option>
+      <option value="image">Zdjęcia</option>
+      <option value="scan">Skany</option>
+      <option value="pdf">PDF</option>
+      <option value="other">Inne</option>
+    </select>
+  </div>
+  <div class="cards-grid" id="doc-grid"></div>
+</div>
+
+<!-- ═══ VACCINES ═══ -->
+<div class="page" id="page-vaccines">
+  <div class="page-header">
+    <div><div class="page-title">Szczepienia</div><div class="page-sub">Harmonogram i historia szczepień</div></div>
+    <button class="btn btn-primary" onclick="openModal('addEvent','vaccines')">+ Dodaj szczepienie</button>
+  </div>
+  <div class="section-title">📋 Harmonogram obowiązkowy (PSO)</div>
+  <div id="vaccine-schedule" style="display:flex;flex-direction:column;gap:6px;margin-bottom:20px;"></div>
+  <div class="section-title">📅 Historia szczepień</div>
+  <div id="vaccine-history" style="display:flex;flex-direction:column;gap:6px;"></div>
+</div>
+
+<!-- ═══ MEDICATIONS ═══ -->
+<div class="page" id="page-medications">
+  <div class="page-header">
+    <div><div class="page-title">Leki & Recepty</div><div class="page-sub">Aktualne leki, dawkowanie, historia recept</div></div>
+    <button class="btn btn-primary" onclick="openModal('addMed')">+ Dodaj lek</button>
+  </div>
+  <div class="section-title">💊 Aktywne leki</div>
+  <div id="meds-active" style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px;"></div>
+  <div class="section-title">📋 Historia leków</div>
+  <div id="meds-history" style="display:flex;flex-direction:column;gap:6px;"></div>
+</div>
+
+<!-- ═══ ALLERGIES ═══ -->
+<div class="page" id="page-allergies">
+  <div class="page-header">
+    <div><div class="page-title">Alergie & Nietolerancje</div><div class="page-sub">Rejestr alergii, reakcje, leczenie</div></div>
+    <button class="btn btn-primary" onclick="openModal('addAllergy')">+ Dodaj alergię</button>
+  </div>
+  <div id="allergy-list" style="display:flex;flex-direction:column;gap:8px;"></div>
+</div>
+
+<!-- ═══ GROWTH ═══ -->
+<div class="page" id="page-growth">
+  <div class="page-header">
+    <div><div class="page-title">Wzrost & Waga</div><div class="page-sub">Tabela pomiarów, BMI, siatki centylowe</div></div>
+    <button class="btn btn-primary" onclick="openModal('addGrowth')">+ Pomiar</button>
+  </div>
+  <div class="cards-grid" style="grid-template-columns:repeat(3,1fr);margin-bottom:20px;" id="growth-stats">
+    <div class="stat-card"><div class="stat-number" id="g-height" style="font-size:22px;color:var(--accent2)">—</div><div class="stat-label">Ostatni wzrost (cm)</div></div>
+    <div class="stat-card"><div class="stat-number" id="g-weight" style="font-size:22px;color:var(--accent3)">—</div><div class="stat-label">Ostatnia waga (kg)</div></div>
+    <div class="stat-card"><div class="stat-number" id="g-bmi" style="font-size:22px;">—</div><div class="stat-label">BMI</div></div>
+  </div>
+  <div class="card">
+    <table class="growth-table">
+      <thead><tr><th>Data</th><th>Wzrost (cm)</th><th>Waga (kg)</th><th>BMI</th><th>Uwagi</th><th></th></tr></thead>
+      <tbody id="growth-table-body"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══ EMERGENCY CARD ═══ -->
+<div class="page" id="page-emergency">
+  <div class="page-header">
+    <div><div class="page-title">🆘 Karta Alarmowa</div><div class="page-sub">Do wydruku — dla ratowników, wychowawców, opiekunów</div></div>
+    <button class="btn btn-primary" onclick="printEmergencyCard()">🖨️ Drukuj kartę</button>
+  </div>
+  <div id="emergency-card-content"></div>
+</div>
+
+<!-- ═══ CATEGORY PAGES (doctor, dentist, etc.) ═══ -->
+<div class="page" id="page-doctor"><div class="page-header"><div><div class="page-title">🩺 Lekarz rodzinny</div><div class="page-sub">Wizyty, zaświadczenia, skierowania</div></div><button class="btn btn-primary" onclick="openModal('addEvent','doctor')">+ Dodaj wizytę</button></div><div class="cards-grid" id="cards-doctor"></div></div>
+<div class="page" id="page-dentist"><div class="page-header"><div><div class="page-title">🦷 Dentysta</div><div class="page-sub">Kontrole, leczenie, profilaktyka</div></div><button class="btn btn-primary" onclick="openModal('addEvent','dentist')">+ Dodaj wizytę</button></div><div class="cards-grid" id="cards-dentist"></div></div>
+<div class="page" id="page-orthodontist"><div class="page-header"><div><div class="page-title">😁 Ortodonta</div><div class="page-sub">Aparat, kontrole, dopasowanie</div></div><button class="btn btn-primary" onclick="openModal('addEvent','orthodontist')">+ Dodaj wizytę</button></div><div class="cards-grid" id="cards-orthodontist"></div></div>
+<div class="page" id="page-eye"><div class="page-header"><div><div class="page-title">👁️ Okulista</div><div class="page-sub">Badania wzroku, okulary, kontrole</div></div><button class="btn btn-primary" onclick="openModal('addEvent','eye')">+ Dodaj wizytę</button></div><div class="cards-grid" id="cards-eye"></div></div>
+<div class="page" id="page-bone"><div class="page-header"><div><div class="page-title">🦴 Ortopeda</div><div class="page-sub">Wizyty, badania, rehabilitacja</div></div><button class="btn btn-primary" onclick="openModal('addEvent','bone')">+ Dodaj wizytę</button></div><div class="cards-grid" id="cards-bone"></div></div>
+<div class="page" id="page-school"><div class="page-header"><div><div class="page-title">📚 Szkoła</div><div class="page-sub">Zebrania, zaświadczenia, oceny, wycieczki</div></div><button class="btn btn-primary" onclick="openModal('addEvent','school')">+ Dodaj zdarzenie</button></div><div class="cards-grid" id="cards-school"></div></div>
+<div class="page" id="page-specialists"><div class="page-header"><div><div class="page-title">👨‍⚕️ Inne specjalizacje</div><div class="page-sub">Psychiatra, logopeda, neurolog, psycholog…</div></div><button class="btn btn-primary" onclick="openModal('addEvent','specialists')">+ Dodaj wizytę</button></div><div class="cards-grid" id="cards-specialists"></div></div>
+
+<!-- ═══ HISTORY ═══ -->
+<div class="page" id="page-history">
+  <div class="page-header"><div><div class="page-title">Historia zdarzeń</div><div class="page-sub">Pełna oś czasu — wszystkie wpisy</div></div></div>
+  <div class="timeline" id="history-timeline"></div>
+</div>
+
+<!-- ═══ SETTINGS ═══ -->
+<div class="page" id="page-settings">
+  <div class="page-header"><div><div class="page-title">⚙️ Ustawienia & Bezpieczeństwo</div><div class="page-sub">Magazyn danych, hasła, motyw, eksport</div></div></div>
+
+  <!-- STORAGE -->
+  <div class="card" style="margin-bottom:14px;">
+    <div class="card-header"><div class="card-label">💾 Magazyn danych (Storage)</div></div>
+    <div style="padding:16px;">
+      <div class="info-box">
+        <strong>Poziomy zapisu:</strong><br>
+        1. <strong>localStorage</strong> — szybki zapis w przeglądarce (domyślny)<br>
+        2. <strong>Plik na dysku</strong> — eksport JSON do dowolnego folderu (trwały, bezpieczny)<br>
+        3. <strong>LAN / NAS</strong> — synchronizacja z QNAP, Synology, serwerem domowym
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:16px;" id="storage-mode-cards">
+        <div class="storage-mode-card selected" id="sm-local" onclick="selectStorageMode('local')">
+          <h4>💻 Lokalna przeglądarka</h4>
+          <p>localStorage — szybkie, ale czyszczone z historią. Zalecane jako tryb roboczy.</p>
+        </div>
+        <div class="storage-mode-card" id="sm-file" onclick="selectStorageMode('file')">
+          <h4>📁 Plik na dysku</h4>
+          <p>Ręczny eksport/import JSON. Trwały. Można trzymać na dysku zewnętrznym.</p>
+        </div>
+        <div class="storage-mode-card" id="sm-lan" onclick="selectStorageMode('lan')">
+          <h4>🌐 LAN / NAS</h4>
+          <p>QNAP, Synology, serwer domowy przez HTTP/REST. Automatyczny sync.</p>
+        </div>
+      </div>
+      <div id="lan-settings" style="display:none;">
+        <div class="form-group"><label class="form-label">URL serwera NAS (np. http://192.168.1.100:8080)</label><input class="form-input" id="lan-url" placeholder="http://192.168.1.x:PORT"></div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Użytkownik</label><input class="form-input" id="lan-user" placeholder="admin"></div>
+          <div class="form-group"><label class="form-label">Hasło NAS</label><input type="password" class="form-input" id="lan-pass" placeholder="hasło NAS"></div>
+        </div>
+        <div class="form-row" style="gap:8px;margin-top:8px;">
+          <button class="btn btn-secondary" onclick="testLanConnection()">🔌 Testuj połączenie</button>
+          <button class="btn btn-success" onclick="saveLanConfig()">💾 Zapisz konfigurację</button>
+          <button class="btn btn-blue" onclick="syncToLan()">🔄 Synchronizuj teraz</button>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;">
+        <button class="btn btn-primary" onclick="exportData()">⬇️ Pobierz backup (JSON)</button>
+        <button class="btn btn-secondary" onclick="document.getElementById('import-file').click()">⬆️ Wczytaj backup</button>
+        <button class="btn btn-secondary" onclick="exportEncrypted()">🔒 Eksport (legacy)</button>
+        <button class="btn btn-primary" onclick="exportEncryptedAES()">🛡️ Eksport AES-256</button>
+        <input type="file" id="import-file" accept=".json" style="display:none;" onchange="importData(event)">
+      </div>
+      <div class="warn-box" style="margin-top:12px;">
+        ⚠️ <strong>Ważne:</strong> localStorage jest kasowany przy czyszczeniu historii przeglądarki. Regularnie pobieraj backup na dysk komputera lub dysk zewnętrzny. Dla danych trwałych użyj trybu Plik lub LAN/NAS.
+      </div>
+    </div>
+  </div>
+
+  <!-- PASSWORD / SECURITY -->
+  <div class="card" style="margin-bottom:14px;" id="settings-admin-section">
+    <div class="card-header"><div class="card-label">🔐 Bezpieczeństwo & Hasła</div><span id="admin-required-badge" class="stag stag-overdue">Wymaga trybu ADMIN</span></div>
+    <div style="padding:16px;" id="security-settings-body">
+      <div class="info-box"><strong>Zmiana hasła administratora</strong> — odblokuj tryb ADMIN w nagłówku aby edytować hasła.</div>
+      <div id="pwd-change-panel" style="display:none;">
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Aktualne hasło admina</label><input type="password" class="form-input" id="pwd-current" placeholder="Aktualne hasło"></div>
+          <div class="form-group"><label class="form-label">Nowe hasło</label><input type="password" class="form-input" id="pwd-new" placeholder="Nowe hasło (min. 4 znaki)"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Potwierdź nowe hasło</label><input type="password" class="form-input" id="pwd-confirm" placeholder="Powtórz nowe hasło"></div>
+          <div style="display:flex;align-items:flex-end;padding-bottom:14px;">
+            <button class="btn btn-primary" onclick="changeAdminPassword()">🔐 Zmień hasło</button>
+          </div>
+        </div>
+        <div id="pwd-msg" style="display:none;padding:8px 12px;border-radius:6px;font-size:12.5px;margin-top:8px;"></div>
+        <hr style="border:none;border-top:1px solid var(--border);margin:16px 0;">
+        <button class="btn btn-danger btn-sm" onclick="resetPasswords()">↩ Przywróć domyślne hasło ("admin")</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- APPEARANCE -->
+  <div class="card">
+    <div class="card-header"><div class="card-label">🎨 Wygląd</div></div>
+    <div style="padding:16px;display:flex;gap:10px;flex-wrap:wrap;">
+      <button class="btn btn-secondary" onclick="setTheme('light')">☀️ Jasny motyw</button>
+      <button class="btn btn-secondary" onclick="setTheme('dark')">🌙 Ciemny motyw</button>
+      <button class="btn btn-danger btn-sm" onclick="clearAllData()" style="margin-left:auto;">🗑️ Usuń wszystkie dane</button>
+    </div>
+  </div>
+</div>
+
+</main>
+</div><!-- /layout -->
+
+<!-- ═══ MODALS ═══ -->
+
+<!-- ADD EVENT MODAL -->
+<div class="modal-overlay" id="modal-addEvent">
+  <div class="modal">
+    <div class="modal-title" id="addEvent-title">➕ Nowe zdarzenie</div>
+    <div class="form-group">
+      <label class="form-label">Kategoria</label>
+      <select class="form-select" id="ev-category">
+        <option value="doctor">🩺 Lekarz</option>
+        <option value="dentist">🦷 Dentysta</option>
+        <option value="orthodontist">😁 Ortodonta</option>
+        <option value="eye">👁️ Okulista</option>
+        <option value="bone">🦴 Ortopeda</option>
+        <option value="vaccines">💉 Szczepienie</option>
+        <option value="school">📚 Szkoła</option>
+        <option value="specialists">👨‍⚕️ Specjalista</option>
+      </select>
+    </div>
+    <div class="form-group"><label class="form-label">Tytuł / Opis wizyty</label><input class="form-input" id="ev-title" placeholder="np. Wizyta kontrolna…"></div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Data</label><input type="date" class="form-input" id="ev-date"></div>
+      <div class="form-group"><label class="form-label">Godzina</label><input type="time" class="form-input" id="ev-time"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Lekarz / Specjalista</label><input class="form-input" id="ev-doctor" placeholder="Dr…"></div>
+      <div class="form-group"><label class="form-label">Placówka</label><input class="form-input" id="ev-place" placeholder="Klinika / Szpital…"></div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Status</label>
+      <select class="form-select" id="ev-status">
+        <option value="upcoming">Nadchodząca</option>
+        <option value="done">Zrealizowana</option>
+        <option value="overdue">Zaległa</option>
+      </select>
+    </div>
+    <div class="form-group"><label class="form-label">Notatki / Zalecenia</label><textarea class="form-textarea" id="ev-notes" placeholder="Zalecenia lekarza, leki, skierowania…"></textarea></div>
+    <div class="form-group">
+      <label class="form-label">📎 Załączniki (zdjęcia, skany)</label>
+      <div class="file-drop" id="ev-drop" onclick="document.getElementById('ev-files').click()" ondragover="dragOver(event,'ev-drop')" ondragleave="dragLeave('ev-drop')" ondrop="handleDrop(event,'ev-files-preview','evFilesArr')">
+        <div style="font-size:26px;margin-bottom:6px;">📎</div>
+        <div style="font-size:12.5px;color:var(--ink2);">Kliknij lub przeciągnij pliki · JPG, PNG, PDF, max 5MB/plik</div>
+      </div>
+      <input type="file" id="ev-files" multiple accept="image/*,application/pdf" style="display:none;" onchange="handleFiles(event,'ev-files-preview','evFilesArr')">
+      <div class="file-preview-grid" id="ev-files-preview"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('addEvent')">Anuluj</button>
+      <button class="btn btn-danger btn-sm" id="ev-delete-btn" style="display:none;" onclick="deleteCurrentEvent()">🗑️ Usuń</button>
+      <button class="btn btn-primary" onclick="saveEvent()">💾 Zapisz zdarzenie</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADD DOCUMENT MODAL -->
+<div class="modal-overlay" id="modal-addDoc">
+  <div class="modal">
+    <div class="modal-title">📁 Dodaj dokument</div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Nazwa dokumentu</label><input class="form-input" id="doc-name" placeholder="np. Wynik badań krwi…"></div>
+      <div class="form-group"><label class="form-label">Typ</label>
+        <select class="form-select" id="doc-type">
+          <option value="scan">Skan dokumentu</option>
+          <option value="image">Zdjęcie</option>
+          <option value="pdf">PDF</option>
+          <option value="other">Inne</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Data dokumentu</label><input type="date" class="form-input" id="doc-date"></div>
+      <div class="form-group"><label class="form-label">Kategoria</label>
+        <select class="form-select" id="doc-category">
+          <option value="doctor">Lekarz</option><option value="dentist">Dentysta</option>
+          <option value="eye">Okulista</option><option value="vaccines">Szczepienia</option>
+          <option value="school">Szkoła</option><option value="specialists">Specjalista</option>
+          <option value="insurance">Ubezpieczenie</option><option value="other">Inne</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group"><label class="form-label">Opis</label><textarea class="form-textarea" id="doc-desc" placeholder="Krótki opis dokumentu…" style="min-height:60px;"></textarea></div>
+    <div class="form-group">
+      <div class="file-drop" id="doc-drop" onclick="document.getElementById('doc-files').click()" ondragover="dragOver(event,'doc-drop')" ondragleave="dragLeave('doc-drop')" ondrop="handleDrop(event,'doc-files-preview','docFilesArr')">
+        <div style="font-size:26px;margin-bottom:6px;">📎</div>
+        <div style="font-size:12.5px;color:var(--ink2);">Kliknij lub przeciągnij pliki</div>
+      </div>
+      <input type="file" id="doc-files" multiple accept="image/*,application/pdf" style="display:none;" onchange="handleFiles(event,'doc-files-preview','docFilesArr')">
+      <div class="file-preview-grid" id="doc-files-preview"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('addDoc')">Anuluj</button>
+      <button class="btn btn-primary" onclick="saveDoc()">💾 Zapisz</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADD MEDICATION MODAL -->
+<div class="modal-overlay" id="modal-addMed">
+  <div class="modal">
+    <div class="modal-title">💊 Dodaj lek / receptę</div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Nazwa leku</label><input class="form-input" id="med-name" placeholder="np. Amoksycylina…"></div>
+      <div class="form-group"><label class="form-label">Dawka</label><input class="form-input" id="med-dose" placeholder="np. 250mg 2x dziennie"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Data rozpoczęcia</label><input type="date" class="form-input" id="med-start"></div>
+      <div class="form-group"><label class="form-label">Data zakończenia (opcja)</label><input type="date" class="form-input" id="med-end"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Przepisał lekarz</label><input class="form-input" id="med-doctor" placeholder="Dr…"></div>
+      <div class="form-group"><label class="form-label">Status</label>
+        <select class="form-select" id="med-status">
+          <option value="active">Aktywny</option>
+          <option value="ended">Zakończony</option>
+          <option value="paused">Wstrzymany</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group"><label class="form-label">Wskazanie / Uwagi</label><textarea class="form-textarea" id="med-notes" placeholder="Wskazanie, skutki uboczne, uwagi…" style="min-height:60px;"></textarea></div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('addMed')">Anuluj</button>
+      <button class="btn btn-primary" onclick="saveMed()">💾 Zapisz</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADD ALLERGY MODAL -->
+<div class="modal-overlay" id="modal-addAllergy">
+  <div class="modal">
+    <div class="modal-title">⚠️ Dodaj alergię</div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Alergen</label><input class="form-input" id="al-name" placeholder="np. Penicylina, orzechy, sierść kota…"></div>
+      <div class="form-group"><label class="form-label">Typ</label>
+        <select class="form-select" id="al-type">
+          <option value="Lek">Lek</option>
+          <option value="Pokarm">Pokarm</option>
+          <option value="Środowiskowy">Środowiskowy</option>
+          <option value="Kontaktowy">Kontaktowy</option>
+          <option value="Inne">Inne</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Nasilenie</label>
+        <select class="form-select" id="al-severity">
+          <option value="high">🔴 Wysokie (anafilaksja możliwa)</option>
+          <option value="medium">🟡 Średnie</option>
+          <option value="low">🟢 Niskie</option>
+        </select>
+      </div>
+      <div class="form-group"><label class="form-label">Zdiagnozował</label><input class="form-input" id="al-doctor" placeholder="Dr…"></div>
+    </div>
+    <div class="form-group"><label class="form-label">Objawy reakcji</label><input class="form-input" id="al-reaction" placeholder="np. pokrzywka, obrzęk, anafilaksja…"></div>
+    <div class="form-group"><label class="form-label">Leczenie / Postępowanie</label><textarea class="form-textarea" id="al-treatment" placeholder="np. Adrenalina 0.3mg IM, Zyrtec…" style="min-height:60px;"></textarea></div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('addAllergy')">Anuluj</button>
+      <button class="btn btn-primary" onclick="saveAllergy()">💾 Zapisz</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADD GROWTH MODAL -->
+<div class="modal-overlay" id="modal-addGrowth">
+  <div class="modal">
+    <div class="modal-title">📏 Nowy pomiar</div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Data pomiaru</label><input type="date" class="form-input" id="gr-date"></div>
+      <div class="form-group"><label class="form-label">Wzrost (cm)</label><input type="number" class="form-input" id="gr-height" placeholder="110.5" step="0.1"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Waga (kg)</label><input type="number" class="form-input" id="gr-weight" placeholder="20.3" step="0.1"></div>
+      <div class="form-group"><label class="form-label">Obwód głowy (cm, opcja)</label><input type="number" class="form-input" id="gr-head" placeholder="52" step="0.1"></div>
+    </div>
+    <div class="form-group"><label class="form-label">Kto zmierzył / Uwagi</label><input class="form-input" id="gr-note" placeholder="np. wizyta u pediatry, pomiar w domu…"></div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('addGrowth')">Anuluj</button>
+      <button class="btn btn-primary" onclick="saveGrowth()">💾 Zapisz pomiar</button>
+    </div>
+  </div>
+</div>
+
+<!-- VIEW EVENT MODAL -->
+<div class="modal-overlay" id="modal-viewEvent">
+  <div class="modal">
+    <div id="view-event-content"></div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('viewEvent')">Zamknij</button>
+      <button class="btn btn-secondary" onclick="shareEvent()">📤 Udostępnij</button>
+      <button class="btn btn-primary" onclick="editCurrentEvent()">✏️ Edytuj</button>
+    </div>
+  </div>
+</div>
+
+<!-- STORAGE PANEL MODAL -->
+<div class="modal-overlay" id="modal-storage">
+  <div class="modal">
+    <div class="modal-title">☁️ Panel magazynu danych</div>
+    <div class="info-box">Dane są aktualnie przechowywane w: <strong id="storage-current-mode">localStorage</strong></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+      <button class="btn btn-primary" onclick="exportData();closeModal('storage')">⬇️ Pobierz backup JSON</button>
+      <button class="btn btn-secondary" onclick="document.getElementById('import-file').click();closeModal('storage')">⬆️ Wczytaj backup</button>
+      <button class="btn btn-secondary" onclick="exportEncrypted()">🔒 Eksport szyfrowany</button>
+    </div>
+    <div style="margin-top:14px;font-size:12.5px;color:var(--ink2);line-height:1.8;">
+      <strong>💡 Wskazówki dotyczące przechowywania:</strong><br>
+      • <strong>localStorage</strong> — zapisz backup przed czyszczeniem przeglądarki<br>
+      • <strong>Dysk zewnętrzny</strong> — pobierz JSON i skopiuj na pendrive / dysk NAS<br>
+      • <strong>QNAP/Synology</strong> — skonfiguruj endpoint REST w Ustawieniach i włącz sync LAN<br>
+      • <strong>Szyfrowany eksport</strong> — zabezpieczone hasłem (AES-256) dla danych wrażliwych
+    </div>
+    <div class="modal-footer"><button class="btn btn-secondary" onclick="closeModal('storage')">Zamknij</button></div>
+  </div>
+</div>
+
+<script>
+// ════════════════════════════════════════════════════════
+// SHA-256 PASSWORD SYSTEM (identyczny jak w KosztorysPro)
+// ════════════════════════════════════════════════════════
+const PWD_KEY = 'kidzfile_pwd_admin';
+const SETUP_KEY = 'kidzfile_setup_done';
+
+async function sha256(msg) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(msg));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+}
+async function savePwdHash(pwd) {
+  const h = await sha256(pwd + 'kidzfile_salt_2026');
+  localStorage.setItem(PWD_KEY, h);
+}
+async function verifyPwd(pwd) {
+  const stored = localStorage.getItem(PWD_KEY);
+  if (!stored) { return pwd === 'admin'; }
+  const h = await sha256(pwd + 'kidzfile_salt_2026');
+  return h === stored;
+}
+
+// ════════════════════════════════════════════════════════
+// BRIDGE STORAGE — localStorage ↔ LAN/NAS (HTTP REST)
+// wzorowany na KosztorysPro BridgeStorage
+// ════════════════════════════════════════════════════════
+const BRIDGE_CFG_KEY = 'kidzfile_bridge_cfg';
+const DATA_KEY = 'kidzfile_data_v2';
+
+const BridgeStorage = {
+  _cfg: null,
+  cfg() {
+    if (!this._cfg) {
+      try { this._cfg = JSON.parse(localStorage.getItem(BRIDGE_CFG_KEY) || 'null'); } catch(e) {}
+      if (!this._cfg) this._cfg = { mode: 'local', lanUrl: '', lanUser: '', lanPass: '' };
+    }
+    return this._cfg;
+  },
+  saveCfg(c) {
+    this._cfg = c;
+    try { localStorage.setItem(BRIDGE_CFG_KEY, JSON.stringify(c)); } catch(e) {}
+  },
+  isLan() { return this.cfg().mode === 'lan' && !!this.cfg().lanUrl; },
+  _headers() {
+    const h = { 'Content-Type': 'application/json' };
+    const c = this.cfg();
+    if (c.lanUser) h['Authorization'] = 'Basic ' + btoa(c.lanUser + ':' + (c.lanPass || ''));
+    return h;
+  },
+  async get(key) {
+    if (this.isLan()) {
+      try {
+        const r = await fetch(this.cfg().lanUrl + '/kidzfile/read?key=' + encodeURIComponent(key), { headers: this._headers(), timeout: 5000 });
+        if (r.ok) { const d = await r.json(); return d.value || null; }
+      } catch(e) { console.warn('[KidzBridge] LAN get fallback to localStorage', e); }
+    }
+    return localStorage.getItem(key);
+  },
+  async set(key, value) {
+    if (this.isLan()) {
+      try {
+        await fetch(this.cfg().lanUrl + '/kidzfile/write', { method: 'POST', headers: this._headers(), body: JSON.stringify({ key, value }) });
+      } catch(e) { console.warn('[KidzBridge] LAN set fallback to localStorage', e); }
+    }
+    try { localStorage.setItem(key, value); } catch(e) { showToast('⚠️ Brak miejsca w localStorage — pobierz backup!', 'error'); }
+  }
+};
+
+// ════════════════════════════════════════════════════════
+// STATE
+// ════════════════════════════════════════════════════════
+let state = {
+  activeProfileId: 0,
+  profiles: [
+    {
+      id: 0,
+      profile: { childName:'', childSurname:'', childBirth:'', childClass:'', childSchool:'', childDoctor:'', childPesel:'', parentEmail:'', par1Name:'', par1Phone:'', par2Name:'', par2Phone:'', nfz:'', insurer:'', policy:'', emergency:'', medicalNotes:'', avatarData: null },
+      events: [],
+      documents: [],
+      medications: [],
+      allergies: [],
+      growth: []
+    }
+  ],
+  settings: { theme: 'light', storageMode: 'local' },
+  _unsaved: false
+};
+
+function currentProfile() { return state.profiles.find(p => p.id === state.activeProfileId) || state.profiles[0]; }
+function pr() { return currentProfile().profile; }
+function evts() { return currentProfile().events; }
+function docs() { return currentProfile().documents; }
+function meds() { return currentProfile().medications; }
+function allergs() { return currentProfile().allergies; }
+function growths() { return currentProfile().growth; }
+
+// ════════════════════════════════════════════════════════
+// SAVE / LOAD
+// ════════════════════════════════════════════════════════
+let _saveTimer = null;
+let _editingEventId = null;
+
+function markUnsaved() {
+  state._unsaved = true;
+  const s = document.getElementById('save-status');
+  if (s) { s.textContent = '● Niezapisane'; s.className = 'save-status unsaved'; }
+}
+
+async function saveState() {
+  const s = document.getElementById('save-status');
+  if (s) { s.textContent = '⟳ Zapisuję…'; s.className = 'save-status saving'; }
+  const serialized = JSON.stringify(state);
+  await BridgeStorage.set(DATA_KEY, serialized);
+  state._unsaved = false;
+  if (s) { s.textContent = '✓ Zapisano ' + new Date().toLocaleTimeString('pl-PL',{hour:'2-digit',minute:'2-digit'}); s.className = 'save-status saved'; }
+}
+
+function autoSave() {
+  markUnsaved();
+  clearTimeout(_saveTimer);
+  _saveTimer = setTimeout(saveState, 1200);
+}
+
+async function loadState() {
+  const raw = await BridgeStorage.get(DATA_KEY);
+  if (raw) {
+    try {
+      const loaded = JSON.parse(raw);
+      state = { ...state, ...loaded };
+      // Ensure all profiles have all arrays
+      state.profiles.forEach(p => {
+        if (!p.medications) p.medications = [];
+        if (!p.allergies) p.allergies = [];
+        if (!p.growth) p.growth = [];
+        if (!p.documents) p.documents = [];
+        if (!p.events) p.events = [];
+      });
+    } catch(e) { console.error('loadState error', e); }
+  }
+}
+
+// ════════════════════════════════════════════════════════
+// ADMIN / USER MODE
+// ════════════════════════════════════════════════════════
+const _adminSess = sessionStorage.getItem('kidzfile_admin');
+let _isAdmin = _adminSess === null ? true : _adminSess === '1';
+if (_adminSess === null) sessionStorage.setItem('kidzfile_admin', '1');
+
+function applyAdminMode() {
+  const btn = document.getElementById('admin-lock-btn');
+  const pwdPanel = document.getElementById('pwd-change-panel');
+  const reqBadge = document.getElementById('admin-required-badge');
+  if (_isAdmin) {
+    if (btn) { btn.textContent = '🔓 ADMIN'; btn.className = 'hbtn admin-on'; }
+    if (pwdPanel) pwdPanel.style.display = 'block';
+    if (reqBadge) reqBadge.style.display = 'none';
+  } else {
+    if (btn) { btn.textContent = '🔒 UŻYTKOWNIK'; btn.className = 'hbtn admin-off'; }
+    if (pwdPanel) pwdPanel.style.display = 'none';
+    if (reqBadge) reqBadge.style.display = 'inline-block';
+  }
+}
+
+function toggleAdminMode() {
+  if (_isAdmin) {
+    _isAdmin = false;
+    sessionStorage.setItem('kidzfile_admin', '0');
+    applyAdminMode();
+    showToast('🔒 Tryb użytkownika aktywny');
+  } else {
+    document.getElementById('admin-modal').style.display = 'flex';
+    const inp = document.getElementById('admin-pass-input');
+    inp.value = '';
+    document.getElementById('admin-pass-err').style.display = 'none';
+    setTimeout(() => inp.focus(), 60);
+  }
+}
+
+function closeAdminModal() { document.getElementById('admin-modal').style.display = 'none'; }
+
+function confirmAdminPass() {
+  const val = document.getElementById('admin-pass-input').value;
+  verifyPwd(val).then(ok => {
+    if (ok) {
+      _isAdmin = true;
+      sessionStorage.setItem('kidzfile_admin', '1');
+      closeAdminModal();
+      applyAdminMode();
+      showToast('🔓 Tryb administratora aktywny', 'success');
+    } else {
+      document.getElementById('admin-pass-err').style.display = 'block';
+      document.getElementById('admin-pass-input').value = '';
+      document.getElementById('admin-pass-input').focus();
+    }
+  });
+}
+
+async function changeAdminPassword() {
+  if (!_isAdmin) return;
+  const cur = document.getElementById('pwd-current').value;
+  const nw = document.getElementById('pwd-new').value;
+  const cf = document.getElementById('pwd-confirm').value;
+  const msgEl = document.getElementById('pwd-msg');
+  const showMsg = (txt, ok) => {
+    msgEl.textContent = txt; msgEl.style.display = 'block';
+    msgEl.style.background = ok ? 'rgba(42,184,122,.12)' : 'rgba(192,57,43,.1)';
+    msgEl.style.color = ok ? 'var(--accent3)' : 'var(--danger)';
+    msgEl.style.border = ok ? '1px solid rgba(42,184,122,.3)' : '1px solid rgba(192,57,43,.25)';
+    if (ok) setTimeout(() => msgEl.style.display = 'none', 3000);
+  };
+  const curOk = await verifyPwd(cur);
+  if (!curOk) { showMsg('❌ Aktualne hasło jest nieprawidłowe.', false); return; }
+  if (nw.length < 4) { showMsg('❌ Min. 4 znaki.', false); return; }
+  if (nw !== cf) { showMsg('❌ Hasła nie są identyczne.', false); return; }
+  await savePwdHash(nw);
+  document.getElementById('pwd-current').value = '';
+  document.getElementById('pwd-new').value = '';
+  document.getElementById('pwd-confirm').value = '';
+  showMsg('✅ Hasło zmienione pomyślnie.', true);
+  showToast('🔐 Hasło zmienione', 'success');
+}
+
+function resetPasswords() {
+  if (!_isAdmin) return;
+  if (!confirm('Przywrócić domyślne hasło "admin"?')) return;
+  localStorage.removeItem(PWD_KEY);
+  localStorage.removeItem(SETUP_KEY);
+  showToast('↩ Hasło przywrócone do "admin"');
+}
+
+// ════════════════════════════════════════════════════════
+// FIRST RUN
+// ════════════════════════════════════════════════════════
+function checkFirstRun() {
+  if (!localStorage.getItem(SETUP_KEY)) {
+    document.getElementById('first-run').style.display = 'flex';
+  }
+}
+
+async function completeFirstRun() {
+  const p1 = document.getElementById('fr-pwd1').value;
+  const p2 = document.getElementById('fr-pwd2').value;
+  const err = document.getElementById('fr-err');
+  if (p1.length < 4) { err.textContent = '❌ Hasło musi mieć min. 4 znaki.'; err.style.display = 'block'; return; }
+  if (p1 !== p2) { err.textContent = '❌ Hasła nie są identyczne.'; err.style.display = 'block'; return; }
+  await savePwdHash(p1);
+  localStorage.setItem(SETUP_KEY, '1');
+  document.getElementById('first-run').style.display = 'none';
+  showToast('✅ Hasło ustawione — witaj w KidzFile Pro!', 'success');
+}
+
+// ════════════════════════════════════════════════════════
+// THEME
+// ════════════════════════════════════════════════════════
+function setTheme(t) {
+  document.documentElement.setAttribute('data-theme', t);
+  state.settings.theme = t;
+  const btn = document.getElementById('theme-btn');
+  if (btn) btn.textContent = t === 'dark' ? '☀️ Tryb' : '🌙 Tryb';
+  autoSave();
+}
+function toggleTheme() { setTheme(state.settings.theme === 'dark' ? 'light' : 'dark'); }
+
+// ════════════════════════════════════════════════════════
+// NAVIGATION
+// ════════════════════════════════════════════════════════
+function showPage(id, navEl) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  const pg = document.getElementById('page-' + id);
+  if (pg) pg.classList.add('active');
+  if (navEl) navEl.classList.add('active');
+  // Render on navigate
+  const renderers = {
+    dashboard: renderDashboard,
+    reminders: () => renderReminders('upcoming'),
+    documents: renderDocuments,
+    vaccines: renderVaccines,
+    medications: renderMedications,
+    allergies: renderAllergies,
+    growth: renderGrowth,
+    emergency: renderEmergencyCard,
+    history: renderHistory,
+    doctor: () => renderCategory('doctor'),
+    dentist: () => renderCategory('dentist'),
+    orthodontist: () => renderCategory('orthodontist'),
+    eye: () => renderCategory('eye'),
+    bone: () => renderCategory('bone'),
+    school: () => renderCategory('school'),
+    specialists: () => renderCategory('specialists'),
+    profile: loadProfileForm,
+  };
+  if (renderers[id]) renderers[id]();
+}
+
+// ════════════════════════════════════════════════════════
+// PROFILE
+// ════════════════════════════════════════════════════════
+function loadProfileForm() {
+  const p = pr();
+  const fields = ['name','surname','birth','class','school','doctor','pesel','email','par1Name','par1Phone','par2Name','par2Phone','nfz','insurer','policy','emergency','medicalNotes'];
+  fields.forEach(f => {
+    const el = document.getElementById('p-' + f.replace(/([A-Z])/g, m => '-' + m.toLowerCase()));
+    if (el) el.value = p['child' + f.charAt(0).toUpperCase() + f.slice(1)] || p[f] || p['par' + f.slice(3)] || '';
+  });
+  // Direct mapping
+  setVal('p-name', p.childName);
+  setVal('p-surname', p.childSurname);
+  setVal('p-birth', p.childBirth);
+  setVal('p-class', p.childClass);
+  setVal('p-school', p.childSchool);
+  setVal('p-doctor', p.childDoctor);
+  setVal('p-pesel', p.childPesel);
+  setVal('p-email', p.parentEmail);
+  setVal('p-par1-name', p.par1Name);
+  setVal('p-par1-phone', p.par1Phone);
+  setVal('p-par2-name', p.par2Name);
+  setVal('p-par2-phone', p.par2Phone);
+  setVal('p-nfz', p.nfz);
+  setVal('p-insurer', p.insurer);
+  setVal('p-policy', p.policy);
+  setVal('p-emergency', p.emergency);
+  setVal('p-medical-notes', p.medicalNotes);
+  updateAvatarDisplay('profile-avatar-big');
+}
+
+function setVal(id, v) { const el = document.getElementById(id); if (el) el.value = v || ''; }
+function getVal(id) { const el = document.getElementById(id); return el ? el.value.trim() : ''; }
+
+function saveProfile() {
+  const p = pr();
+  p.childName = getVal('p-name');
+  p.childSurname = getVal('p-surname');
+  p.childBirth = getVal('p-birth');
+  p.childClass = getVal('p-class');
+  p.childSchool = getVal('p-school');
+  p.childDoctor = getVal('p-doctor');
+  p.childPesel = getVal('p-pesel');
+  p.parentEmail = getVal('p-email');
+  p.par1Name = getVal('p-par1-name');
+  p.par1Phone = getVal('p-par1-phone');
+  p.par2Name = getVal('p-par2-name');
+  p.par2Phone = getVal('p-par2-phone');
+  p.nfz = getVal('p-nfz');
+  p.insurer = getVal('p-insurer');
+  p.policy = getVal('p-policy');
+  p.emergency = getVal('p-emergency');
+  p.medicalNotes = getVal('p-medical-notes');
+  autoSave();
+  updateSidebarProfile();
+  showToast('✅ Profil zapisany', 'success');
+}
+
+function addNewProfile() {
+  const newId = Date.now();
+  state.profiles.push({ id: newId, profile: { childName: 'Nowe dziecko', childSurname:'', childBirth:'', childClass:'', childSchool:'', childDoctor:'' }, events:[], documents:[], medications:[], allergies:[], growth:[] });
+  state.activeProfileId = newId;
+  autoSave();
+  updateSidebarProfile();
+  loadProfileForm();
+  showToast('👶 Nowy profil dodany');
+}
+
+function switchProfile(id) {
+  state.activeProfileId = id;
+  autoSave();
+  updateSidebarProfile();
+  renderDashboard();
+}
+
+function updateSidebarProfile() {
+  const p = pr();
+  const name = [p.childName, p.childSurname].filter(Boolean).join(' ') || 'Brak nazwy';
+  const age = p.childBirth ? calcAge(p.childBirth) : '';
+  document.getElementById('sb-name').textContent = name;
+  document.getElementById('sb-meta').textContent = age ? age + ' lat' + (age === 1 ? '' : age < 5 ? 'a' : '') + (p.childClass ? ' · kl. ' + p.childClass : '') : p.childClass ? 'kl. ' + p.childClass : 'Brak danych';
+  const sw = document.getElementById('profile-switcher');
+  sw.innerHTML = state.profiles.map(pr2 => `<div class="profile-pill ${pr2.id === state.activeProfileId ? 'active' : ''}" onclick="switchProfile(${pr2.id})">${(pr2.profile.childName || '?').charAt(0)}</div>`).join('') + '<div class="profile-pill add-pill" onclick="addNewProfile()">+</div>';
+  updateAvatarDisplay('dash-avatar');
+}
+
+function updateAvatarDisplay(elId) {
+  const p = pr();
+  const el = document.getElementById(elId);
+  if (!el) return;
+  if (p.avatarData) {
+    el.innerHTML = `<img src="${p.avatarData}" alt="avatar">`;
+  } else {
+    el.innerHTML = (p.childName || '?').charAt(0).toUpperCase();
+  }
+}
+
+function handleAvatarFile(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  if (file.size > 3 * 1024 * 1024) { showToast('⚠️ Plik za duży (max 3MB)', 'error'); return; }
+  const reader = new FileReader();
+  reader.onload = ev => {
+    pr().avatarData = ev.target.result;
+    updateAvatarDisplay('profile-avatar-big');
+    updateAvatarDisplay('dash-avatar');
+    autoSave();
+  };
+  reader.readAsDataURL(file);
+}
+function clearAvatar() { pr().avatarData = null; updateAvatarDisplay('profile-avatar-big'); updateAvatarDisplay('dash-avatar'); autoSave(); }
+
+// ════════════════════════════════════════════════════════
+// DASHBOARD
+// ════════════════════════════════════════════════════════
+function renderDashboard() {
+  updateSidebarProfile();
+  const p = pr();
+  const events = evts();
+  const today = new Date().toISOString().split('T')[0];
+  // Update stats
+  const upcoming = events.filter(e => e.status === 'upcoming' && e.date >= today);
+  const overdue = events.filter(e => e.status === 'overdue' || (e.status !== 'done' && e.date < today));
+  const done = events.filter(e => e.status === 'done');
+  const activeMeds = meds().filter(m => m.status === 'active');
+  setInner('s-total', events.length);
+  setInner('s-upcoming', upcoming.length);
+  setInner('s-overdue', overdue.length);
+  setInner('s-done', done.length);
+  setInner('s-meds', activeMeds.length);
+  // Overdue badge in sidebar
+  const badge = document.getElementById('overdue-badge');
+  if (badge) { badge.style.display = overdue.length > 0 ? 'inline' : 'none'; badge.textContent = overdue.length; }
+  // Profile hero
+  const name = [p.childName, p.childSurname].filter(Boolean).join(' ') || 'Brak profilu';
+  setInner('dash-name', name);
+  const age = p.childBirth ? calcAge(p.childBirth) : null;
+  setInner('dash-meta', age ? `${age} lat · ${p.childSchool || 'brak szkoły'} · kl. ${p.childClass || '—'}` : 'Uzupełnij dane dziecka →');
+  // Badges
+  const badges = document.getElementById('dash-badges');
+  if (badges) {
+    let b = '';
+    if (overdue.length > 0) b += `<span class="badge badge-orange">⚠️ ${overdue.length} zaległych</span>`;
+    if (upcoming.length > 0) b += `<span class="badge badge-blue">🔔 ${upcoming.length} nadchodzących</span>`;
+    if (activeMeds.length > 0) b += `<span class="badge badge-green">💊 ${activeMeds.length} leków</span>`;
+    badges.innerHTML = b;
+  }
+  // Upcoming list
+  const upcomingDiv = document.getElementById('dash-upcoming');
+  const sorted = [...upcoming, ...overdue].sort((a,b) => a.date.localeCompare(b.date)).slice(0,8);
+  if (sorted.length === 0) {
+    upcomingDiv.innerHTML = `<div class="empty-state"><div class="empty-state-icon">✅</div><div class="empty-state-title">Brak nadchodzących zdarzeń</div><div>Kliknij "+ Nowe zdarzenie" aby dodać</div></div>`;
+  } else {
+    upcomingDiv.innerHTML = sorted.map(e => reminderItemHTML(e)).join('');
+  }
+}
+
+// ════════════════════════════════════════════════════════
+// EVENTS
+// ════════════════════════════════════════════════════════
+const catMeta = {
+  doctor:       { icon:'🩺', label:'Lekarz', dotClass:'dot-doctor' },
+  dentist:      { icon:'🦷', label:'Dentysta', dotClass:'dot-dentist' },
+  orthodontist: { icon:'😁', label:'Ortodonta', dotClass:'dot-ortho' },
+  eye:          { icon:'👁️', label:'Okulista', dotClass:'dot-eye' },
+  bone:         { icon:'🦴', label:'Ortopeda', dotClass:'dot-bone' },
+  vaccines:     { icon:'💉', label:'Szczepienie', dotClass:'dot-vaccine' },
+  school:       { icon:'📚', label:'Szkoła', dotClass:'dot-school' },
+  specialists:  { icon:'👨‍⚕️', label:'Specjalista', dotClass:'dot-other' },
+};
+
+function openModal(type, presetCategory = null) {
+  if (type === 'addEvent') {
+    _editingEventId = null;
+    document.getElementById('addEvent-title').textContent = '➕ Nowe zdarzenie';
+    document.getElementById('ev-title').value = '';
+    document.getElementById('ev-date').value = new Date().toISOString().split('T')[0];
+    document.getElementById('ev-time').value = '';
+    document.getElementById('ev-doctor').value = '';
+    document.getElementById('ev-place').value = '';
+    document.getElementById('ev-notes').value = '';
+    document.getElementById('ev-status').value = 'upcoming';
+    document.getElementById('ev-delete-btn').style.display = 'none';
+    if (presetCategory) document.getElementById('ev-category').value = presetCategory;
+    evFilesArr = [];
+    document.getElementById('ev-files-preview').innerHTML = '';
+  }
+  if (type === 'addGrowth') {
+    document.getElementById('gr-date').value = new Date().toISOString().split('T')[0];
+    document.getElementById('gr-height').value = '';
+    document.getElementById('gr-weight').value = '';
+    document.getElementById('gr-head').value = '';
+    document.getElementById('gr-note').value = '';
+  }
+  if (type === 'addMed') {
+    document.getElementById('med-name').value = '';
+    document.getElementById('med-dose').value = '';
+    document.getElementById('med-start').value = new Date().toISOString().split('T')[0];
+    document.getElementById('med-end').value = '';
+    document.getElementById('med-doctor').value = '';
+    document.getElementById('med-notes').value = '';
+    document.getElementById('med-status').value = 'active';
+  }
+  if (type === 'addAllergy') {
+    ['al-name','al-reaction','al-treatment','al-doctor'].forEach(id => { const el = document.getElementById(id); if(el) el.value=''; });
+    document.getElementById('al-severity').value = 'medium';
+    document.getElementById('al-type').value = 'Lek';
+  }
+  if (type === 'addDoc') {
+    document.getElementById('doc-name').value = '';
+    document.getElementById('doc-desc').value = '';
+    document.getElementById('doc-date').value = new Date().toISOString().split('T')[0];
+    document.getElementById('doc-type').value = 'scan';
+    docFilesArr = [];
+    document.getElementById('doc-files-preview').innerHTML = '';
+  }
+  document.getElementById('modal-' + type).classList.add('open');
+}
+
+function closeModal(type) { document.getElementById('modal-' + type).classList.remove('open'); }
+
+function saveEvent() {
+  const title = getVal('ev-title');
+  if (!title) { showToast('⚠️ Podaj tytuł zdarzenia', 'error'); return; }
+  const ev = {
+    id: _editingEventId || Date.now(),
+    category: document.getElementById('ev-category').value,
+    title, date: getVal('ev-date'), time: getVal('ev-time'),
+    doctor: getVal('ev-doctor'), place: getVal('ev-place'),
+    notes: getVal('ev-notes'), status: document.getElementById('ev-status').value,
+    attachments: evFilesArr.map(f => ({ name: f.name, type: f.type, dataUrl: f.dataUrl })),
+    createdAt: new Date().toISOString()
+  };
+  // Auto-status
+  const today = new Date().toISOString().split('T')[0];
+  if (ev.status === 'upcoming' && ev.date < today) ev.status = 'overdue';
+  const idx = evts().findIndex(e => e.id === ev.id);
+  if (idx >= 0) evts()[idx] = ev;
+  else evts().push(ev);
+  autoSave();
+  closeModal('addEvent');
+  showToast('✅ Zdarzenie zapisane', 'success');
+  renderDashboard();
+  renderCategory(ev.category);
+}
+
+function deleteCurrentEvent() {
+  if (!_editingEventId) return;
+  if (!confirm('Usunąć to zdarzenie?')) return;
+  const arr = evts();
+  const idx = arr.findIndex(e => e.id === _editingEventId);
+  if (idx >= 0) arr.splice(idx, 1);
+  autoSave();
+  closeModal('addEvent');
+  closeModal('viewEvent');
+  showToast('🗑️ Zdarzenie usunięte');
+  renderDashboard();
+}
+
+function viewEvent(id) {
+  const ev = evts().find(e => e.id === id);
+  if (!ev) return;
+  const meta = catMeta[ev.category] || catMeta.specialists;
+  const statusLabels = { upcoming:'Nadchodząca', done:'Zrealizowana', overdue:'Zaległa' };
+  const statusClass = { upcoming:'stag-upcoming', done:'stag-done', overdue:'stag-overdue' };
+  let attachHtml = '';
+  if (ev.attachments && ev.attachments.length > 0) {
+    attachHtml = '<div style="margin-top:12px;"><div class="form-label">📎 Załączniki</div><div class="file-preview-grid">';
+    ev.attachments.forEach(a => {
+      if (a.type && a.type.startsWith('image')) {
+        attachHtml += `<div class="file-preview-item"><img src="${a.dataUrl}" onclick="window.open('${a.dataUrl}')"></div>`;
+      } else {
+        attachHtml += `<div class="file-preview-item" onclick="downloadAttachment('${a.dataUrl}','${a.name}')">📄</div>`;
+      }
+    });
+    attachHtml += '</div></div>';
+  }
+  document.getElementById('view-event-content').innerHTML = `
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+      <span style="font-size:28px">${meta.icon}</span>
+      <div>
+        <div class="modal-title" style="margin-bottom:3px;">${ev.title}</div>
+        <span class="stag ${statusClass[ev.status] || 'stag-info'}">${statusLabels[ev.status] || ev.status}</span>
+        <span class="stag stag-info" style="margin-left:4px;">${meta.label}</span>
+      </div>
+    </div>
+    ${ev.date ? `<div class="form-label">📅 Termin</div><div style="margin-bottom:10px;">${formatDate(ev.date)} ${ev.time ? '· ' + ev.time : ''}</div>` : ''}
+    ${ev.doctor ? `<div class="form-label">👤 Specjalista</div><div style="margin-bottom:10px;">${ev.doctor}</div>` : ''}
+    ${ev.place ? `<div class="form-label">🏥 Placówka</div><div style="margin-bottom:10px;">${ev.place}</div>` : ''}
+    ${ev.notes ? `<div class="form-label">📝 Notatki</div><div style="margin-bottom:10px;line-height:1.6;white-space:pre-wrap;">${ev.notes}</div>` : ''}
+    ${attachHtml}
+  `;
+  _editingEventId = id;
+  document.getElementById('modal-viewEvent').classList.add('open');
+}
+
+function editCurrentEvent() {
+  if (!_editingEventId) return;
+  const ev = evts().find(e => e.id === _editingEventId);
+  if (!ev) return;
+  closeModal('viewEvent');
+  document.getElementById('addEvent-title').textContent = '✏️ Edytuj zdarzenie';
+  document.getElementById('ev-category').value = ev.category;
+  document.getElementById('ev-title').value = ev.title;
+  document.getElementById('ev-date').value = ev.date;
+  document.getElementById('ev-time').value = ev.time || '';
+  document.getElementById('ev-doctor').value = ev.doctor || '';
+  document.getElementById('ev-place').value = ev.place || '';
+  document.getElementById('ev-notes').value = ev.notes || '';
+  document.getElementById('ev-status').value = ev.status;
+  document.getElementById('ev-delete-btn').style.display = 'inline-flex';
+  evFilesArr = (ev.attachments || []).map(a => ({ name: a.name, type: a.type, dataUrl: a.dataUrl }));
+  renderFilePreviews('ev-files-preview', evFilesArr);
+  document.getElementById('modal-addEvent').classList.add('open');
+}
+
+function shareEvent() {
+  const ev = _editingEventId ? evts().find(e => e.id === _editingEventId) : null;
+  if (!ev) return;
+  const text = `${catMeta[ev.category]?.icon || '📋'} ${ev.title}\n📅 ${formatDate(ev.date)} ${ev.time || ''}\n${ev.doctor ? '👤 ' + ev.doctor + '\n' : ''}${ev.notes ? '📝 ' + ev.notes : ''}`;
+  if (navigator.share) navigator.share({ title: ev.title, text });
+  else navigator.clipboard.writeText(text).then(() => showToast('📋 Skopiowano do schowka'));
+}
+
+function downloadAttachment(dataUrl, name) {
+  const a = document.createElement('a'); a.href = dataUrl; a.download = name; a.click();
+}
+
+// ════════════════════════════════════════════════════════
+// RENDER — REMINDERS
+// ════════════════════════════════════════════════════════
+function filterReminders(type, tabEl) {
+  document.querySelectorAll('#reminder-tabs .tab').forEach(t => t.classList.remove('active'));
+  if (tabEl) tabEl.classList.add('active');
+  renderReminders(type);
+}
+
+function renderReminders(filter = 'upcoming') {
+  const today = new Date().toISOString().split('T')[0];
+  let list = [...evts()];
+  if (filter === 'upcoming') list = list.filter(e => e.status === 'upcoming' && e.date >= today);
+  else if (filter === 'overdue') list = list.filter(e => e.status === 'overdue' || (e.status !== 'done' && e.date < today));
+  else if (filter === 'done') list = list.filter(e => e.status === 'done');
+  list.sort((a,b) => a.date.localeCompare(b.date));
+  const div = document.getElementById('reminder-list');
+  div.innerHTML = list.length === 0 ? `<div class="empty-state"><div class="empty-state-icon">✅</div><div class="empty-state-title">Brak wpisów w tej kategorii</div></div>` : list.map(e => reminderItemHTML(e)).join('');
+}
+
+function reminderItemHTML(ev) {
+  const meta = catMeta[ev.category] || catMeta.specialists;
+  const today = new Date().toISOString().split('T')[0];
+  const isOverdue = ev.status !== 'done' && ev.date < today;
+  const cls = ev.status === 'done' ? 'done' : isOverdue ? 'overdue' : daysUntil(ev.date) <= 3 ? 'urgent' : 'normal';
+  const statusTag = ev.status === 'done' ? `<span class="stag stag-done">✓ Zrealizowana</span>` : isOverdue ? `<span class="stag stag-overdue">⚠️ Zaległa</span>` : `<span class="stag stag-upcoming">${daysUntil(ev.date)} dni</span>`;
+  return `<div class="reminder-item ${cls}" onclick="viewEvent(${ev.id})">
+    <div class="reminder-icon">${meta.icon}</div>
+    <div class="reminder-content">
+      <div class="reminder-title">${ev.title}</div>
+      <div class="reminder-meta">${meta.label}${ev.doctor ? ' · ' + ev.doctor : ''}${ev.place ? ' · ' + ev.place : ''}</div>
+    </div>
+    <div class="reminder-right">
+      <div class="reminder-date">${formatDate(ev.date)}${ev.time ? ' ' + ev.time : ''}</div>
+      <div style="margin-top:3px;">${statusTag}</div>
+    </div>
+  </div>`;
+}
+
+// ════════════════════════════════════════════════════════
+// RENDER — CATEGORY CARDS
+// ════════════════════════════════════════════════════════
+function renderCategory(cat) {
+  const events = evts().filter(e => e.category === cat).sort((a,b) => b.date.localeCompare(a.date));
+  const div = document.getElementById('cards-' + cat);
+  if (!div) return;
+  const meta = catMeta[cat] || catMeta.specialists;
+  if (events.length === 0) {
+    div.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><div class="empty-state-icon">${meta.icon}</div><div class="empty-state-title">Brak wpisów</div><div>Kliknij "+ Dodaj" aby dodać pierwszy wpis</div></div>`;
+    return;
+  }
+  const today = new Date().toISOString().split('T')[0];
+  div.innerHTML = events.map(ev => {
+    const isOverdue = ev.status !== 'done' && ev.date < today;
+    const stag = ev.status === 'done' ? `<span class="stag stag-done">✓ Zrealizowana</span>` : isOverdue ? `<span class="stag stag-overdue">⚠️ Zaległa</span>` : `<span class="stag stag-upcoming">Nadchodząca</span>`;
+    return `<div class="card" onclick="viewEvent(${ev.id})" style="cursor:pointer;">
+      <div class="card-header">
+        <div class="card-label"><div class="nav-dot ${meta.dotClass}"></div>${meta.label}</div>
+        ${stag}
+      </div>
+      <div class="card-title">${ev.title}</div>
+      <div class="card-date">📅 ${formatDate(ev.date)}${ev.time ? ' · ' + ev.time : ''}</div>
+      ${ev.doctor ? `<div class="card-desc">👤 ${ev.doctor}</div>` : ''}
+      ${ev.place ? `<div class="card-desc" style="margin-top:3px;">🏥 ${ev.place}</div>` : ''}
+      ${ev.notes ? `<div class="card-desc" style="margin-top:6px;font-size:12px;">${ev.notes.substring(0,100)}${ev.notes.length>100?'…':''}</div>` : ''}
+      <div class="card-actions">
+        ${(ev.attachments||[]).length > 0 ? `<span class="stag stag-info">📎 ${ev.attachments.length}</span>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ════════════════════════════════════════════════════════
+// RENDER — DOCUMENTS
+// ════════════════════════════════════════════════════════
+let docFilesArr = [];
+
+function renderDocuments(filterType = 'all', searchTerm = '') {
+  let list = [...docs()];
+  if (filterType !== 'all') list = list.filter(d => d.type === filterType);
+  if (searchTerm) list = list.filter(d => d.name.toLowerCase().includes(searchTerm.toLowerCase()) || (d.desc||'').toLowerCase().includes(searchTerm.toLowerCase()));
+  const div = document.getElementById('doc-grid');
+  if (list.length === 0) { div.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><div class="empty-state-icon">📂</div><div class="empty-state-title">Brak dokumentów</div></div>`; return; }
+  const typeIcon = { image:'🖼️', scan:'🗒️', pdf:'📄', other:'📎' };
+  div.innerHTML = list.map(d => {
+    const firstImg = (d.attachments||[]).find(a => a.type?.startsWith('image'));
+    return `<div class="card" style="cursor:pointer;" onclick="viewDoc(${d.id})">
+      <div class="card-header"><div class="card-label">${typeIcon[d.type]||'📎'} ${d.type?.toUpperCase()||''}</div></div>
+      ${firstImg ? `<img src="${firstImg.dataUrl}" style="width:100%;height:100px;object-fit:cover;border-radius:6px;margin-bottom:8px;">` : ''}
+      <div class="card-title">${d.name}</div>
+      ${d.date ? `<div class="card-date">📅 ${formatDate(d.date)}</div>` : ''}
+      ${d.desc ? `<div class="card-desc">${d.desc}</div>` : ''}
+    </div>`;
+  }).join('');
+}
+
+function saveDoc() {
+  const name = getVal('doc-name');
+  if (!name) { showToast('⚠️ Podaj nazwę dokumentu', 'error'); return; }
+  docs().push({ id: Date.now(), name, type: document.getElementById('doc-type').value, category: document.getElementById('doc-category').value, date: getVal('doc-date'), desc: getVal('doc-desc'), attachments: docFilesArr.map(f => ({ name: f.name, type: f.type, dataUrl: f.dataUrl })), createdAt: new Date().toISOString() });
+  autoSave();
+  closeModal('addDoc');
+  renderDocuments();
+  showToast('📁 Dokument zapisany', 'success');
+}
+
+function viewDoc(id) {
+  const doc = docs().find(d => d.id === id);
+  if (!doc || !doc.attachments || !doc.attachments[0]) return;
+  const a = doc.attachments[0];
+  if (a.type.startsWith('image')) { const w = window.open(); w.document.write(`<html><body style="margin:0;background:#000;display:flex;align-items:center;justify-content:center;min-height:100vh;"><img src="${a.dataUrl}" style="max-width:100%;max-height:100vh;">
+<!-- PWA INSTALL BANNER -->
+<div id="pwa-banner" class="hidden">
+  <div class="pwa-icon">Kf</div>
+  <div class="pwa-text">
+    <strong id="pwa-banner-title">Zainstaluj KidzFile na telefonie</strong>
+    <span id="pwa-banner-sub">Działa offline · ikona na ekranie głównym · powiadomienia</span>
+    <div class="pwa-ios-steps" id="pwa-ios-steps">
+      Kliknij <strong style="color:var(--accent2)">Udostępnij</strong> (□↑) w pasku Safari → <strong style="color:var(--accent2)">Dodaj do ekranu głównego</strong>
+    </div>
+  </div>
+  <div style="display:flex;gap:6px;flex-shrink:0;">
+    <button class="hbtn" id="pwa-install-btn" onclick="pwaInstall()" style="display:none;">⬇️ Zainstaluj</button>
+    <button class="hbtn" onclick="document.getElementById('pwa-banner').classList.add('hidden')">✕</button>
+  </div>
+</div>
+
+</body></html>`); }
+  else { const link = document.createElement('a'); link.href = a.dataUrl; link.download = a.name; link.click(); }
+}
+
+// ════════════════════════════════════════════════════════
+// RENDER — VACCINES
+// ════════════════════════════════════════════════════════
+const PSO_SCHEDULE = [
+  { name: 'BCG (gruźlica)', ageMonths: 0 },
+  { name: 'WZW B — dawka 1', ageMonths: 0 },
+  { name: 'WZW B — dawka 2', ageMonths: 2 },
+  { name: 'DTPa/IPV/Hib — dawka 1', ageMonths: 2 },
+  { name: 'DTPa/IPV/Hib — dawka 2', ageMonths: 4 },
+  { name: 'PCV (pneumokoki) — dawka 1', ageMonths: 2 },
+  { name: 'PCV (pneumokoki) — dawka 2', ageMonths: 4 },
+  { name: 'DTPa/IPV/Hib — dawka 3', ageMonths: 6 },
+  { name: 'WZW B — dawka 3', ageMonths: 6 },
+  { name: 'MMR (odra, świnka, różyczka) — dawka 1', ageMonths: 13 },
+  { name: 'Varicella (ospa)', ageMonths: 13 },
+  { name: 'DTPa/IPV/Hib — przypomnienie', ageMonths: 16 },
+  { name: 'PCV — przypomnienie', ageMonths: 16 },
+  { name: 'DTPa — przypomnienie', ageMonths: 72 },
+  { name: 'MMR — dawka 2', ageMonths: 72 },
+  { name: 'Td (tężec, błonica) — przypomnienie', ageMonths: 168 },
+  { name: 'dTpa (krztusiec dorosłych)', ageMonths: 168 },
+];
+
+function renderVaccines() {
+  const p = pr();
+  const vaccineEvents = evts().filter(e => e.category === 'vaccines');
+  // Schedule
+  const sched = document.getElementById('vaccine-schedule');
+  if (!p.childBirth) {
+    sched.innerHTML = `<div class="info-box">Uzupełnij datę urodzenia w Profilu aby zobaczyć harmonogram PSO.</div>`;
+  } else {
+    const birthDate = new Date(p.childBirth);
+    sched.innerHTML = PSO_SCHEDULE.map(v => {
+      const targetDate = new Date(birthDate);
+      targetDate.setMonth(targetDate.getMonth() + v.ageMonths);
+      const targetStr = targetDate.toISOString().split('T')[0];
+      const done = vaccineEvents.some(e => e.title.toLowerCase().includes(v.name.split(' ')[0].toLowerCase()) && e.status === 'done');
+      const past = targetStr < new Date().toISOString().split('T')[0];
+      const cls = done ? 'vac-done' : past ? 'vac-overdue' : 'vac-pending';
+      const icon = done ? '✓' : past ? '!' : '○';
+      return `<div class="vaccine-row">
+        <div class="vac-check ${cls}">${icon}</div>
+        <div class="vac-name">${v.name}</div>
+        <div class="vac-date">${v.ageMonths < 12 ? v.ageMonths + ' mies.' : Math.round(v.ageMonths/12) + ' lat'} · ~${formatDate(targetStr)}</div>
+      </div>`;
+    }).join('');
+  }
+  // History
+  const hist = document.getElementById('vaccine-history');
+  if (vaccineEvents.length === 0) { hist.innerHTML = `<div class="empty-state"><div class="empty-state-icon">💉</div><div class="empty-state-title">Brak zarejestrowanych szczepień</div></div>`; return; }
+  hist.innerHTML = vaccineEvents.sort((a,b) => b.date.localeCompare(a.date)).map(ev => `
+    <div class="vaccine-row" onclick="viewEvent(${ev.id})" style="cursor:pointer;">
+      <div class="vac-check ${ev.status === 'done' ? 'vac-done' : 'vac-pending'}">${ev.status === 'done' ? '✓' : '○'}</div>
+      <div class="vac-name">${ev.title}</div>
+      <div class="vac-date">${formatDate(ev.date)}${ev.doctor ? ' · ' + ev.doctor : ''}</div>
+    </div>`).join('');
+}
+
+// ════════════════════════════════════════════════════════
+// RENDER — MEDICATIONS
+// ════════════════════════════════════════════════════════
+function saveMed() {
+  const name = getVal('med-name');
+  if (!name) { showToast('⚠️ Podaj nazwę leku', 'error'); return; }
+  meds().push({ id: Date.now(), name, dose: getVal('med-dose'), start: getVal('med-start'), end: getVal('med-end'), doctor: getVal('med-doctor'), notes: getVal('med-notes'), status: document.getElementById('med-status').value, createdAt: new Date().toISOString() });
+  autoSave();
+  closeModal('addMed');
+  renderMedications();
+  showToast('💊 Lek zapisany', 'success');
+}
+
+function renderMedications() {
+  const active = meds().filter(m => m.status === 'active');
+  const history = meds().filter(m => m.status !== 'active');
+  const medCard = (m) => `<div class="med-card ${m.status === 'active' ? 'med-active' : 'med-ended'}">
+    <div class="med-icon">💊</div>
+    <div class="med-info">
+      <div class="med-name">${m.name}</div>
+      <div class="med-dose">${m.dose || '—'} ${m.doctor ? '· Dr '+m.doctor : ''}</div>
+      ${m.start ? `<div class="med-dose">📅 ${formatDate(m.start)}${m.end ? ' → ' + formatDate(m.end) : ' → nadal'}</div>` : ''}
+      ${m.notes ? `<div class="med-dose" style="margin-top:4px;color:var(--ink2)">${m.notes}</div>` : ''}
+    </div>
+    <button class="btn btn-danger btn-xs" onclick="deleteMed(${m.id})">🗑️</button>
+  </div>`;
+  const activeDiv = document.getElementById('meds-active');
+  activeDiv.innerHTML = active.length === 0 ? `<div class="empty-state" style="padding:20px;"><div class="empty-state-icon">💊</div><div class="empty-state-title">Brak aktywnych leków</div></div>` : active.map(medCard).join('');
+  const histDiv = document.getElementById('meds-history');
+  histDiv.innerHTML = history.length === 0 ? '' : history.map(medCard).join('');
+}
+
+function deleteMed(id) {
+  if (!confirm('Usunąć lek z rejestru?')) return;
+  const idx = meds().findIndex(m => m.id === id);
+  if (idx >= 0) meds().splice(idx, 1);
+  autoSave(); renderMedications();
+  showToast('🗑️ Lek usunięty');
+}
+
+// ════════════════════════════════════════════════════════
+// RENDER — ALLERGIES
+// ════════════════════════════════════════════════════════
+function saveAllergy() {
+  const name = getVal('al-name');
+  if (!name) { showToast('⚠️ Podaj alergen', 'error'); return; }
+  allergs().push({ id: Date.now(), name, type: getVal('al-type') || 'Inne', severity: document.getElementById('al-severity').value, doctor: getVal('al-doctor'), reaction: getVal('al-reaction'), treatment: getVal('al-treatment'), createdAt: new Date().toISOString() });
+  autoSave();
+  closeModal('addAllergy');
+  renderAllergies();
+  showToast('⚠️ Alergia zapisana', 'success');
+}
+
+function renderAllergies() {
+  const div = document.getElementById('allergy-list');
+  const list = allergs();
+  if (list.length === 0) { div.innerHTML = `<div class="empty-state"><div class="empty-state-icon">🌿</div><div class="empty-state-title">Brak zarejestrowanych alergii</div></div>`; return; }
+  const sevLabel = { high:'🔴 Wysokie', medium:'🟡 Średnie', low:'🟢 Niskie' };
+  div.innerHTML = list.map(a => `<div class="allergy-item allergy-sev-${a.severity}">
+    <div style="flex:1;">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+        <div class="allergy-name">${a.name}</div>
+        <span class="stag stag-${a.severity==='high'?'overdue':a.severity==='medium'?'upcoming':'info'}">${sevLabel[a.severity]||a.severity}</span>
+        <span class="stag stag-info">${a.type}</span>
+      </div>
+      ${a.reaction ? `<div class="allergy-reaction">⚡ ${a.reaction}</div>` : ''}
+      ${a.treatment ? `<div class="allergy-reaction">💊 ${a.treatment}</div>` : ''}
+      ${a.doctor ? `<div class="allergy-reaction">👤 ${a.doctor}</div>` : ''}
+    </div>
+    <button class="btn btn-danger btn-xs" onclick="deleteAllergy(${a.id})">🗑️</button>
+  </div>`).join('');
+}
+
+function deleteAllergy(id) {
+  if (!confirm('Usunąć alergię?')) return;
+  const idx = allergs().findIndex(a => a.id === id);
+  if (idx >= 0) allergs().splice(idx, 1);
+  autoSave(); renderAllergies(); showToast('🗑️ Usunięto');
+}
+
+// ════════════════════════════════════════════════════════
+// RENDER — GROWTH
+// ════════════════════════════════════════════════════════
+function saveGrowth() {
+  const date = getVal('gr-date');
+  const height = parseFloat(document.getElementById('gr-height').value);
+  const weight = parseFloat(document.getElementById('gr-weight').value);
+  if (!date || (!height && !weight)) { showToast('⚠️ Podaj datę i przynajmniej jeden wymiar', 'error'); return; }
+  growths().push({ id: Date.now(), date, height: height || null, weight: weight || null, head: parseFloat(document.getElementById('gr-head').value) || null, note: getVal('gr-note'), createdAt: new Date().toISOString() });
+  autoSave();
+  closeModal('addGrowth');
+  renderGrowth();
+  showToast('📏 Pomiar zapisany', 'success');
+}
+
+function calcBMI(h, w) {
+  if (!h || !w) return null;
+  return (w / ((h/100) ** 2)).toFixed(1);
+}
+
+function bmiClass(bmi) {
+  if (!bmi) return '';
+  const b = parseFloat(bmi);
+  if (b < 14) return 'bmi-alert';
+  if (b < 16) return 'bmi-warn';
+  if (b > 25) return 'bmi-alert';
+  if (b > 22) return 'bmi-warn';
+  return 'bmi-normal';
+}
+
+function renderGrowth() {
+  const list = [...growths()].sort((a,b) => b.date.localeCompare(a.date));
+  const last = list[0];
+  if (last) {
+    const bmi = calcBMI(last.height, last.weight);
+    setInner('g-height', last.height ? last.height + ' cm' : '—');
+    setInner('g-weight', last.weight ? last.weight + ' kg' : '—');
+    const bmiEl = document.getElementById('g-bmi');
+    if (bmiEl) { bmiEl.textContent = bmi || '—'; bmiEl.className = 'stat-number ' + bmiClass(bmi); }
+  }
+  const tbody = document.getElementById('growth-table-body');
+  if (list.length === 0) { tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:24px;color:var(--ink3);">Brak pomiarów — dodaj pierwszy klikając "+ Pomiar"</td></tr>'; return; }
+  tbody.innerHTML = list.map(g => {
+    const bmi = calcBMI(g.height, g.weight);
+    return `<tr>
+      <td>${formatDate(g.date)}</td>
+      <td>${g.height ? g.height + ' cm' : '—'}</td>
+      <td>${g.weight ? g.weight + ' kg' : '—'}</td>
+      <td><span class="${bmiClass(bmi)}">${bmi || '—'}</span></td>
+      <td>${g.note || '—'}</td>
+      <td><button class="btn btn-danger btn-xs" onclick="deleteGrowth(${g.id})">🗑️</button></td>
+    </tr>`;
+  }).join('');
+}
+
+function deleteGrowth(id) {
+  const idx = growths().findIndex(g => g.id === id);
+  if (idx >= 0) growths().splice(idx, 1);
+  autoSave(); renderGrowth(); showToast('🗑️ Pomiar usunięty');
+}
+
+// ════════════════════════════════════════════════════════
+// EMERGENCY CARD
+// ════════════════════════════════════════════════════════
+function renderEmergencyCard() {
+  const p = pr();
+  const al = allergs();
+  const highAllergies = al.filter(a => a.severity === 'high');
+  const activeMeds2 = meds().filter(m => m.status === 'active');
+  const name = [p.childName, p.childSurname].filter(Boolean).join(' ') || '—';
+  const div = document.getElementById('emergency-card-content');
+  div.innerHTML = `
+    <div class="emergency-card" id="printable-card">
+      <div class="emergency-title">🆘 KARTA ALARMOWA DZIECKA</div>
+      <div class="ec-grid">
+        <div class="ec-field"><label>Imię i nazwisko</label><span>${name}</span></div>
+        <div class="ec-field"><label>Data urodzenia</label><span>${formatDate(p.childBirth) || '—'}</span></div>
+        <div class="ec-field"><label>PESEL</label><span>${p.childPesel || '—'}</span></div>
+        <div class="ec-field"><label>Lekarz rodzinny</label><span>${p.childDoctor || '—'}</span></div>
+        <div class="ec-field"><label>Opiekun 1</label><span>${p.par1Name || '—'} · ${p.par1Phone || '—'}</span></div>
+        <div class="ec-field"><label>Opiekun 2</label><span>${p.par2Name || '—'} · ${p.par2Phone || '—'}</span></div>
+        <div class="ec-field"><label>Kontakt alarmowy</label><span>${p.emergency || '—'}</span></div>
+        <div class="ec-field"><label>Nr karty NFZ/EKUZ</label><span>${p.nfz || '—'}</span></div>
+      </div>
+      ${highAllergies.length > 0 ? `<div style="margin-top:14px;padding:10px;background:rgba(255,255,255,0.15);border-radius:8px;border-left:4px solid #ffcc00;">
+        <div style="font-weight:800;font-size:13px;margin-bottom:6px;">⚠️ UWAGA — ALERGIE WYSOKIEGO RYZYKA:</div>
+        ${highAllergies.map(a => `<div style="font-size:13px;">🔴 <strong>${a.name}</strong> — ${a.reaction || 'brak opisu'} | Postępowanie: ${a.treatment || '—'}</div>`).join('')}
+      </div>` : ''}
+      ${activeMeds2.length > 0 ? `<div style="margin-top:10px;padding:10px;background:rgba(255,255,255,0.12);border-radius:8px;">
+        <div style="font-weight:700;font-size:12px;margin-bottom:5px;">💊 AKTYWNE LEKI:</div>
+        ${activeMeds2.map(m => `<div style="font-size:12px;">• ${m.name} — ${m.dose || '—'}</div>`).join('')}
+      </div>` : ''}
+      ${p.medicalNotes ? `<div style="margin-top:10px;padding:10px;background:rgba(255,255,255,0.1);border-radius:8px;font-size:12px;"><strong>ℹ️ Uwagi medyczne:</strong> ${p.medicalNotes}</div>` : ''}
+    </div>
+    <div class="info-box" style="margin-top:10px;">
+      💡 Wydrukuj kartę i umieść w plecaku dziecka, powiadom wychowawców i opiekunów. Aktualizuj przy zmianach leków i alergii.
+    </div>`;
+}
+
+function printEmergencyCard() {
+  const card = document.getElementById('printable-card');
+  if (!card) return;
+  const win = window.open('', '_blank');
+  win.document.write(`<!DOCTYPE html><html><head><title>Karta Alarmowa</title>
+  <style>body{font-family:sans-serif;margin:20px;} .emergency-card{background:#c0392b;color:#fff;border-radius:12px;padding:20px;} .ec-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;} .ec-field label{font-size:10px;opacity:.7;display:block;} .ec-field span{font-size:14px;font-weight:600;} @page{size:A4;margin:1cm;} 
+/* ═══ PWA INSTALL BANNER ═══ */
+#pwa-banner{display:none;position:fixed;bottom:0;left:0;right:0;z-index:500;background:var(--header-bg);border-top:2px solid var(--accent);padding:12px 20px;display:flex;align-items:center;gap:14px;animation:slideUp .3s ease;}
+#pwa-banner.hidden{display:none!important;}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.pwa-icon{width:44px;height:44px;border-radius:10px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-size:16px;font-weight:800;color:#fff;flex-shrink:0;}
+.pwa-text{flex:1;}
+.pwa-text strong{color:var(--header-text);font-size:13px;display:block;}
+.pwa-text span{color:var(--ink3);font-size:11.5px;}
+.pwa-ios-steps{display:none;margin-top:8px;font-size:11.5px;color:var(--ink2);line-height:1.8;}
+/* ═══ ENCRYPTION STATUS ═══ */
+.enc-badge{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:12px;font-size:10px;font-weight:700;background:rgba(42,184,122,0.15);color:#2ab87a;border:1px solid rgba(42,184,122,0.3);}
+.enc-badge.off{background:rgba(192,57,43,0.12);color:#e05050;border-color:rgba(192,57,43,0.3);}
+@media print{button{display:none}}</style>
+  </head><body>${card.outerHTML}
+<!-- PWA INSTALL BANNER -->
+<div id="pwa-banner" class="hidden">
+  <div class="pwa-icon">Kf</div>
+  <div class="pwa-text">
+    <strong id="pwa-banner-title">Zainstaluj KidzFile na telefonie</strong>
+    <span id="pwa-banner-sub">Działa offline · ikona na ekranie głównym · powiadomienia</span>
+    <div class="pwa-ios-steps" id="pwa-ios-steps">
+      Kliknij <strong style="color:var(--accent2)">Udostępnij</strong> (□↑) w pasku Safari → <strong style="color:var(--accent2)">Dodaj do ekranu głównego</strong>
+    </div>
+  </div>
+  <div style="display:flex;gap:6px;flex-shrink:0;">
+    <button class="hbtn" id="pwa-install-btn" onclick="pwaInstall()" style="display:none;">⬇️ Zainstaluj</button>
+    <button class="hbtn" onclick="document.getElementById('pwa-banner').classList.add('hidden')">✕</button>
+  </div>
+</div>
+
+</body></html>`);
+  win.document.close();
+  setTimeout(() => win.print(), 300);
+}
+
+// ════════════════════════════════════════════════════════
+// HISTORY
+// ════════════════════════════════════════════════════════
+function renderHistory() {
+  const list = [...evts()].sort((a,b) => b.date.localeCompare(a.date));
+  const div = document.getElementById('history-timeline');
+  if (list.length === 0) { div.innerHTML = `<div class="empty-state"><div class="empty-state-icon">📅</div><div class="empty-state-title">Brak historii</div></div>`; return; }
+  const dotColors = { upcoming:'var(--accent2)', done:'var(--accent3)', overdue:'var(--danger)' };
+  div.innerHTML = list.map(ev => {
+    const meta = catMeta[ev.category] || catMeta.specialists;
+    return `<div class="timeline-item" onclick="viewEvent(${ev.id})">
+      <div class="timeline-dot" style="background:${dotColors[ev.status]||'var(--ink3)'}"></div>
+      <div class="timeline-date">${formatDate(ev.date)} ${ev.time || ''}</div>
+      <div class="timeline-content">
+        <div class="timeline-title">${meta.icon} ${ev.title}</div>
+        <div class="timeline-desc">${meta.label}${ev.doctor ? ' · ' + ev.doctor : ''}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ════════════════════════════════════════════════════════
+// FILE HANDLING
+// ════════════════════════════════════════════════════════
+let evFilesArr = [];
+
+function handleFiles(event, previewId, arrName) {
+  const arr = arrName === 'evFilesArr' ? evFilesArr : docFilesArr;
+  const files = Array.from(event.target.files);
+  files.forEach(file => {
+    if (file.size > 5 * 1024 * 1024) { showToast(`⚠️ ${file.name} za duży (max 5MB)`, 'error'); return; }
+    const reader = new FileReader();
+    reader.onload = e => { arr.push({ name: file.name, type: file.type, dataUrl: e.target.result }); renderFilePreviews(previewId, arr); };
+    reader.readAsDataURL(file);
+  });
+}
+
+function handleDrop(event, previewId, arrName) {
+  event.preventDefault();
+  const arr = arrName === 'evFilesArr' ? evFilesArr : docFilesArr;
+  const files = Array.from(event.dataTransfer.files);
+  files.forEach(file => {
+    if (file.size > 5 * 1024 * 1024) { showToast(`⚠️ ${file.name} za duży`, 'error'); return; }
+    const reader = new FileReader();
+    reader.onload = e => { arr.push({ name: file.name, type: file.type, dataUrl: e.target.result }); renderFilePreviews(previewId, arr); };
+    reader.readAsDataURL(file);
+  });
+}
+
+function dragOver(event, dropId) { event.preventDefault(); document.getElementById(dropId).classList.add('dragover'); }
+function dragLeave(dropId) { document.getElementById(dropId).classList.remove('dragover'); }
+
+function renderFilePreviews(previewId, arr) {
+  const div = document.getElementById(previewId);
+  div.innerHTML = arr.map((f, i) => {
+    if (f.type.startsWith('image')) return `<div class="file-preview-item"><img src="${f.dataUrl}"><div class="file-preview-remove" onclick="removeFile(${i},'${previewId}','${arr === evFilesArr ? 'evFilesArr' : 'docFilesArr'}')">×</div></div>`;
+    return `<div class="file-preview-item">📄<div class="file-preview-remove" onclick="removeFile(${i},'${previewId}','${arr === evFilesArr ? 'evFilesArr' : 'docFilesArr'}')">×</div></div>`;
+  }).join('');
+}
+
+function removeFile(idx, previewId, arrName) {
+  const arr = arrName === 'evFilesArr' ? evFilesArr : docFilesArr;
+  arr.splice(idx, 1);
+  renderFilePreviews(previewId, arr);
+}
+
+// ════════════════════════════════════════════════════════
+// STORAGE / EXPORT / IMPORT
+// ════════════════════════════════════════════════════════
+function exportData() {
+  const dataStr = JSON.stringify(state, null, 2);
+  const blob = new Blob([dataStr], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `kidzfile_backup_${new Date().toISOString().split('T')[0]}.json`;
+  a.click();
+  URL.revokeObjectURL(a.href);
+  showToast('⬇️ Backup pobrany!', 'success');
+}
+
+async function exportEncrypted() {
+  const pwd = prompt('Podaj hasło do zaszyfrowania pliku (zapamiętaj — bez niego nie otworzysz):');
+  if (!pwd || pwd.length < 4) { showToast('⚠️ Zbyt krótkie hasło', 'error'); return; }
+  try {
+    const dataStr = JSON.stringify(state);
+    const enc = btoa(unescape(encodeURIComponent(dataStr + '|KIDZFILE_ENC|' + pwd.substring(0,4))));
+    const blob = new Blob([enc], { type: 'text/plain' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `kidzfile_encrypted_${new Date().toISOString().split('T')[0]}.kfenc`;
+    a.click();
+    URL.revokeObjectURL(a.href);
+    showToast('🔒 Szyfrowany eksport gotowy', 'success');
+  } catch(e) { showToast('❌ Błąd szyfrowania', 'error'); }
+}
+
+function importData(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      let data;
+      if (file.name.endsWith('.kfenc')) {
+        const pwd = prompt('Podaj hasło do odszyfrowania:');
+        if (!pwd) return;
+        const dec = decodeURIComponent(escape(atob(e.target.result)));
+        if (!dec.includes('|KIDZFILE_ENC|')) throw new Error('Nieprawidłowe hasło lub plik');
+        const parts = dec.split('|KIDZFILE_ENC|');
+        if (parts[1].substring(0,4) !== pwd.substring(0,4)) { showToast('❌ Nieprawidłowe hasło', 'error'); return; }
+        data = JSON.parse(parts[0]);
+      } else {
+        data = JSON.parse(e.target.result);
+      }
+      if (!data.profiles) { showToast('❌ Nieprawidłowy format pliku', 'error'); return; }
+      if (!confirm('Wczytanie backupu zastąpi obecne dane. Kontynuować?')) return;
+      state = data;
+      saveState();
+      renderDashboard();
+      showToast('✅ Dane wczytane z pliku', 'success');
+    } catch(err) {
+      showToast('❌ Błąd wczytywania pliku: ' + err.message, 'error');
+    }
+  };
+  reader.readAsText(file);
+  event.target.value = '';
+}
+
+function backupFull() { exportData(); }
+
+// STORAGE SETTINGS
+function selectStorageMode(mode) {
+  document.querySelectorAll('.storage-mode-card').forEach(c => c.classList.remove('selected'));
+  document.getElementById('sm-' + mode).classList.add('selected');
+  document.getElementById('lan-settings').style.display = mode === 'lan' ? 'block' : 'none';
+  const cfg = BridgeStorage.cfg();
+  cfg.mode = mode;
+  BridgeStorage.saveCfg(cfg);
+  state.settings.storageMode = mode;
+  autoSave();
+  const names = { local:'localStorage (przeglądarka)', file:'Plik na dysku', lan:'LAN / NAS' };
+  document.getElementById('storage-current-mode').textContent = names[mode] || mode;
+}
+
+function saveLanConfig() {
+  const cfg = { mode: 'lan', lanUrl: getVal('lan-url'), lanUser: getVal('lan-user'), lanPass: document.getElementById('lan-pass')?.value || '' };
+  BridgeStorage.saveCfg(cfg);
+  showToast('✅ Konfiguracja LAN zapisana', 'success');
+}
+
+async function testLanConnection() {
+  const url = getVal('lan-url');
+  if (!url) { showToast('⚠️ Podaj URL serwera', 'error'); return; }
+  try {
+    showToast('🔌 Testuję połączenie…');
+    const r = await fetch(url + '/kidzfile/ping', { method: 'GET', timeout: 5000 });
+    if (r.ok) showToast('✅ Połączenie udane!', 'success');
+    else showToast('⚠️ Serwer odpowiedział z błędem: ' + r.status, 'error');
+  } catch(e) {
+    showToast('❌ Brak połączenia z ' + url + ' — sprawdź URL i czy serwer NAS jest włączony', 'error');
+  }
+}
+
+async function syncToLan() {
+  await saveState();
+  showToast('🔄 Synchronizacja z LAN zakończona', 'success');
+}
+
+function openStoragePanel() { document.getElementById('modal-storage').classList.add('open'); }
+
+function clearAllData() {
+  if (!_isAdmin) { showToast('⚠️ Wymaga trybu ADMIN', 'error'); return; }
+  if (!confirm('UWAGA: To usunie WSZYSTKIE dane. Czy najpierw pobrać backup?')) return;
+  if (!confirm('Na pewno usunąć wszystkie dane? Tej operacji nie można cofnąć!')) return;
+  localStorage.removeItem(DATA_KEY);
+  location.reload();
+}
+
+// ════════════════════════════════════════════════════════
+// UTILITIES
+// ════════════════════════════════════════════════════════
+function formatDate(dateStr) {
+  if (!dateStr) return '';
+  try { return new Date(dateStr + 'T12:00:00').toLocaleDateString('pl-PL', { day:'2-digit', month:'long', year:'numeric' }); }
+  catch(e) { return dateStr; }
+}
+
+function calcAge(birthStr) {
+  if (!birthStr) return null;
+  const birth = new Date(birthStr);
+  const now = new Date();
+  let age = now.getFullYear() - birth.getFullYear();
+  const m = now.getMonth() - birth.getMonth();
+  if (m < 0 || (m === 0 && now.getDate() < birth.getDate())) age--;
+  return age;
+}
+
+function daysUntil(dateStr) {
+  if (!dateStr) return 999;
+  const d = new Date(dateStr + 'T12:00:00');
+  const today = new Date();
+  today.setHours(12,0,0,0);
+  return Math.round((d - today) / 86400000);
+}
+
+function setInner(id, val) { const el = document.getElementById(id); if (el) el.textContent = val; }
+
+let _toastTimer;
+function showToast(msg, type = '') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'show' + (type ? ' ' + type : '');
+  clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(() => t.classList.remove('show'), 3400);
+}
+
+function printView() { window.print(); }
+
+// Close modals on backdrop click
+document.addEventListener('click', e => {
+  if (e.target.classList.contains('modal-overlay')) {
+    e.target.classList.remove('open');
+  }
+});
+
+document.getElementById('admin-modal').addEventListener('click', function(e) {
+  if (e.target === this) closeAdminModal();
+});
+
+// ════════════════════════════════════════════════════════
+// INIT
+// ════════════════════════════════════════════════════════
+async function init() {
+  await loadState();
+  // Apply theme
+  setTheme(state.settings?.theme || 'light');
+  // Apply storage mode card selection
+  const mode = state.settings?.storageMode || BridgeStorage.cfg().mode || 'local';
+  document.querySelectorAll('.storage-mode-card').forEach(c => c.classList.remove('selected'));
+  const smCard = document.getElementById('sm-' + mode);
+  if (smCard) smCard.classList.add('selected');
+  if (mode === 'lan') document.getElementById('lan-settings').style.display = 'block';
+  // Load LAN config into form
+  const cfg = BridgeStorage.cfg();
+  setVal('lan-url', cfg.lanUrl);
+  setVal('lan-user', cfg.lanUser);
+
+  applyAdminMode();
+  updateSidebarProfile();
+  renderDashboard();
+
+  // Seed demo data if empty
+  const cp = currentProfile();
+  if (cp.events.length === 0 && !cp.profile.childName) {
+    cp.profile = { childName:'Maja', childSurname:'Kowalska', childBirth:'2016-03-15', childClass:'3b', childSchool:'SP nr 12 im. Jana Pawła II', childDoctor:'Dr Anna Wiśniewska', par1Name:'Katarzyna Kowalska', par1Phone:'+48 601 234 567', par2Name:'Piotr Kowalski', par2Phone:'+48 602 345 678', parentEmail:'familia@example.pl', nfz:'', insurer:'PZU', policy:'PZU-123456', emergency:'Babcia: +48 603 456 789', medicalNotes:'Astma łagodna — inhalator Salbutamol w razie potrzeby.', avatarData: null };
+    const addDays = (n) => { const d = new Date(); d.setDate(d.getDate()+n); return d.toISOString().split('T')[0]; };
+    cp.events = [
+      { id:1, category:'dentist', title:'Wizyta kontrolna stomatolog', doctor:'Dr Piotr Zając', place:'Klinika Dentystyczna przy ul. Kwiatowej', date:addDays(7), time:'10:30', status:'upcoming', notes:'Kontrola po plombowaniu', attachments:[], createdAt:new Date().toISOString() },
+      { id:2, category:'school', title:'Zebranie z rodzicami — klasa 3b', doctor:'', place:'SP nr 12', date:addDays(14), time:'17:00', status:'upcoming', notes:'Zabrać dziennik ocen', attachments:[], createdAt:new Date().toISOString() },
+      { id:3, category:'eye', title:'Badanie wzroku — kontrola roczna', doctor:'Dr Maria Olsza', place:'Centrum Okulistyczne', date:addDays(21), time:'11:00', status:'upcoming', notes:'Sprawdzić czy wada wzroku się powiększa', attachments:[], createdAt:new Date().toISOString() },
+      { id:4, category:'vaccines', title:'Szczepienie MMR — dawka przypominająca', doctor:'Dr Anna Wiśniewska', place:'Przychodnia NFZ', date:addDays(-45), time:'09:00', status:'done', notes:'Szczepienie przebiegło prawidłowo, brak powikłań', attachments:[], createdAt:new Date().toISOString() },
+      { id:5, category:'orthodontist', title:'Dopasowanie aparatu ortodontycznego', doctor:'Dr Katarzyna Marchewka', place:'Ortodont Pro', date:addDays(3), time:'14:00', status:'upcoming', notes:'Zabrać kartę ortodontyczną, aparat ruchomy dolny', attachments:[], createdAt:new Date().toISOString() },
+    ];
+    cp.medications = [
+      { id:1, name:'Salbutamol (inhalator)', dose:'2 inhalacje w razie potrzeby', start:'2023-01-01', end:'', doctor:'Dr Anna Wiśniewska', notes:'Na astmę — tylko w razie napadu', status:'active', createdAt:new Date().toISOString() }
+    ];
+    cp.allergies = [
+      { id:1, name:'Amoksycylina (penicylina)', type:'Lek', severity:'high', doctor:'Dr Anna Wiśniewska', reaction:'Pokrzywka, możliwy wstrząs anafilaktyczny', treatment:'Adrenalina 0.15mg IM, wezwać 112', createdAt:new Date().toISOString() },
+      { id:2, name:'Orzechy ziemne', type:'Pokarm', severity:'medium', doctor:'Dr Anna Wiśniewska', reaction:'Pokrzywka, obrzęk ust', treatment:'Cetirizyna 10mg doustnie', createdAt:new Date().toISOString() }
+    ];
+    cp.growth = [
+      { id:1, date:addDays(-180), height:116, weight:21.5, head:null, note:'Wizyta u pediatry', createdAt:new Date().toISOString() },
+      { id:2, date:addDays(-90), height:117.5, weight:22, head:null, note:'Pomiar w domu', createdAt:new Date().toISOString() },
+      { id:3, date:addDays(-10), height:119, weight:22.8, head:null, note:'Wizyta u pediatry', createdAt:new Date().toISOString() },
+    ];
+    await saveState();
+    renderDashboard();
+  }
+
+  checkFirstRun();
+}
+
+
+// ════════════════════════════════════════════════════════
+// AES-256-GCM ENCRYPTION (Web Crypto API — prawdziwe szyfrowanie)
+// ════════════════════════════════════════════════════════
+const KfCrypto = {
+  async deriveKey(password, salt) {
+    const enc = new TextEncoder();
+    const keyMaterial = await crypto.subtle.importKey('raw', enc.encode(password), 'PBKDF2', false, ['deriveKey']);
+    return crypto.subtle.deriveKey(
+      { name: 'PBKDF2', salt: enc.encode(salt), iterations: 310000, hash: 'SHA-256' },
+      keyMaterial, { name: 'AES-GCM', length: 256 }, false, ['encrypt', 'decrypt']
+    );
+  },
+  async encrypt(plaintext, password) {
+    const iv = crypto.getRandomValues(new Uint8Array(12));
+    const salt = btoa(String.fromCharCode(...crypto.getRandomValues(new Uint8Array(16))));
+    const key = await this.deriveKey(password, salt);
+    const enc = new TextEncoder();
+    const ciphertext = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, enc.encode(plaintext));
+    const ctArr = Array.from(new Uint8Array(ciphertext));
+    const ivArr = Array.from(iv);
+    return JSON.stringify({ v:2, salt, iv: btoa(String.fromCharCode(...ivArr)), ct: btoa(String.fromCharCode(...ctArr)) });
+  },
+  async decrypt(encryptedStr, password) {
+    const obj = JSON.parse(encryptedStr);
+    if (obj.v !== 2) throw new Error('Nieznany format — użyj starszej wersji KidzFile');
+    const key = await this.deriveKey(password, obj.salt);
+    const iv = Uint8Array.from(atob(obj.iv), c => c.charCodeAt(0));
+    const ct = Uint8Array.from(atob(obj.ct), c => c.charCodeAt(0));
+    const plain = await crypto.subtle.decrypt({ name: 'AES-GCM', iv }, key, ct);
+    return new TextDecoder().decode(plain);
+  }
+};
+
+async function exportEncryptedAES() {
+  if (!_isAdmin) { showToast('⚠️ Wymaga trybu ADMIN', 'error'); return; }
+  const pwd = prompt('Podaj hasło AES-256 do zaszyfrowania eksportu:\n(min. 8 znaków — zapamiętaj!)');
+  if (!pwd || pwd.length < 8) { showToast('⚠️ Hasło musi mieć min. 8 znaków', 'error'); return; }
+  const pwd2 = prompt('Powtórz hasło:');
+  if (pwd !== pwd2) { showToast('❌ Hasła nie są identyczne', 'error'); return; }
+  try {
+    showToast('🔒 Szyfrowanie AES-256…');
+    const plaintext = JSON.stringify(state);
+    const encrypted = await KfCrypto.encrypt(plaintext, pwd);
+    const blob = new Blob([encrypted], { type: 'application/json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `kidzfile_AES256_${new Date().toISOString().split('T')[0]}.kfaes`;
+    a.click();
+    URL.revokeObjectURL(a.href);
+    showToast('✅ Zaszyfrowany eksport AES-256 gotowy!', 'success');
+  } catch(e) { showToast('❌ Błąd szyfrowania: ' + e.message, 'error'); }
+}
+
+async function importEncryptedAES(file) {
+  const pwd = prompt('Podaj hasło AES-256 do odszyfrowania:');
+  if (!pwd) return;
+  try {
+    const text = await file.text();
+    showToast('🔓 Odszyfrowywanie…');
+    const plaintext = await KfCrypto.decrypt(text, pwd);
+    const data = JSON.parse(plaintext);
+    if (!data.profiles) { showToast('❌ Nieprawidłowy format danych', 'error'); return; }
+    if (!confirm('Odszyfrowanie powiodło się! Wczytać dane? (zastąpią obecne)')) return;
+    state = data;
+    await saveState();
+    renderDashboard();
+    showToast('✅ Dane odszyfrowane i wczytane!', 'success');
+  } catch(e) { showToast('❌ Błąd: nieprawidłowe hasło lub uszkodzony plik', 'error'); }
+}
+
+// Patch importData to handle .kfaes files
+const _origImportData = importData;
+function importData(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  if (file.name.endsWith('.kfaes')) { importEncryptedAES(file); event.target.value = ''; return; }
+  _origImportData(event);
+}
+
+// ════════════════════════════════════════════════════════
+// PWA — Service Worker + Install Banner
+// ════════════════════════════════════════════════════════
+let _pwaPrompt = null;
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('./sw.js').then(reg => {
+    console.log('[KidzFile PWA] SW zarejestrowany:', reg.scope);
+  }).catch(err => console.warn('[KidzFile PWA] SW błąd:', err));
+}
+
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  _pwaPrompt = e;
+  const banner = document.getElementById('pwa-banner');
+  if (!banner) return;
+  banner.classList.remove('hidden');
+  document.getElementById('pwa-install-btn').style.display = 'inline-flex';
+  document.getElementById('pwa-banner-title').textContent = 'Zainstaluj KidzFile jako aplikację';
+});
+
+function pwaInstall() {
+  if (_pwaPrompt) {
+    _pwaPrompt.prompt();
+    _pwaPrompt.userChoice.then(r => {
+      if (r.outcome === 'accepted') {
+        showToast('✅ KidzFile zainstalowany!', 'success');
+        document.getElementById('pwa-banner').classList.add('hidden');
+      }
+      _pwaPrompt = null;
+    });
+  }
+}
+
+window.addEventListener('appinstalled', () => {
+  document.getElementById('pwa-banner')?.classList.add('hidden');
+  showToast('🎉 KidzFile zainstalowany na urządzeniu!', 'success');
+});
+
+// iOS detection — show manual instructions
+function checkIOSInstall() {
+  const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  const isStandalone = window.navigator.standalone === true || window.matchMedia('(display-mode: standalone)').matches;
+  if (isIOS && !isStandalone) {
+    const banner = document.getElementById('pwa-banner');
+    if (!banner) return;
+    const dismissed = sessionStorage.getItem('pwa_ios_dismissed');
+    if (dismissed) return;
+    banner.classList.remove('hidden');
+    document.getElementById('pwa-banner-title').textContent = 'Dodaj KidzFile do ekranu iPhone';
+    document.getElementById('pwa-banner-sub').textContent = 'Działa offline · ikona · pełny ekran';
+    document.getElementById('pwa-ios-steps').style.display = 'block';
+    document.querySelector('#pwa-banner button[onclick*="hidden"]').onclick = () => {
+      banner.classList.add('hidden');
+      sessionStorage.setItem('pwa_ios_dismissed', '1');
+    };
+  }
+}
+
+checkIOSInstall();
+init();
+</script>
+
+<!-- PWA INSTALL BANNER -->
+<div id="pwa-banner" class="hidden">
+  <div class="pwa-icon">Kf</div>
+  <div class="pwa-text">
+    <strong id="pwa-banner-title">Zainstaluj KidzFile na telefonie</strong>
+    <span id="pwa-banner-sub">Działa offline · ikona na ekranie głównym · powiadomienia</span>
+    <div class="pwa-ios-steps" id="pwa-ios-steps">
+      Kliknij <strong style="color:var(--accent2)">Udostępnij</strong> (□↑) w pasku Safari → <strong style="color:var(--accent2)">Dodaj do ekranu głównego</strong>
+    </div>
+  </div>
+  <div style="display:flex;gap:6px;flex-shrink:0;">
+    <button class="hbtn" id="pwa-install-btn" onclick="pwaInstall()" style="display:none;">⬇️ Zainstaluj</button>
+    <button class="hbtn" onclick="document.getElementById('pwa-banner').classList.add('hidden')">✕</button>
+  </div>
+</div>
+
+</body>
+</html>
